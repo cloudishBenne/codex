@@ -75,7 +75,7 @@ async fn turn_start_shell_zsh_fork_executes_command_v2() -> Result<()> {
     let wait_for_interrupt =
         format!("while [ ! -f '{release_marker_escaped}' ]; do sleep 0.01; done");
     let response = create_command_execution_sse_response(
-        vec!["/bin/sh".to_string(), "-c".to_string(), wait_for_interrupt],
+        vec!["/data/data/com.termux/files/usr/bin/sh".to_string(), "-c".to_string(), wait_for_interrupt],
         /*workdir*/ None,
         Some(5000),
         "call-zsh-fork",
@@ -158,7 +158,7 @@ async fn turn_start_shell_zsh_fork_executes_command_v2() -> Result<()> {
     assert_eq!(id, "call-zsh-fork");
     assert_eq!(status, CommandExecutionStatus::InProgress);
     assert!(command.starts_with(&command_packaged_zsh_path(&codex_home).display().to_string()));
-    assert!(command.contains("/bin/sh -c"));
+    assert!(command.contains("/data/data/com.termux/files/usr/bin/sh -c"));
     assert!(command.contains("sleep 0.01"));
     assert!(command.contains(&release_marker.display().to_string()));
     assert_eq!(cwd.as_str(), workspace.to_string_lossy().as_ref());

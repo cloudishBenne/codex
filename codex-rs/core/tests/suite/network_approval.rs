@@ -1891,7 +1891,7 @@ async fn remote_guardian_network_decisions_are_scoped_to_each_request_and_enviro
         let command = if environment.environment_id == LOCAL_ENVIRONMENT_ID {
             local_shell.derive_exec_args(command, /*use_login_shell*/ false)
         } else {
-            vec!["/bin/sh".to_string(), "-c".to_string(), command.clone()]
+            vec!["/data/data/com.termux/files/usr/bin/sh".to_string(), "-c".to_string(), command.clone()]
         };
         expected_actions.push(json!({
             "host": NETWORK_TEST_HOST,
@@ -2346,7 +2346,7 @@ fn network_fetch_args(environment_id: &str) -> Value {
 
 fn network_exec_args(command: &str) -> Value {
     json!({
-        "shell": "/bin/sh",
+        "shell": "/data/data/com.termux/files/usr/bin/sh",
         "cmd": command,
         "login": false,
         "yield_time_ms": 1_000,

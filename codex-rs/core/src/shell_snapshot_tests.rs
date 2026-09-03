@@ -127,7 +127,7 @@ async fn try_create_creates_and_deletes_snapshot_file() -> Result<()> {
     let dir = tempdir()?;
     let shell = Shell {
         shell_type: ShellType::Bash,
-        shell_path: PathBuf::from("/bin/bash"),
+        shell_path: PathBuf::from("/data/data/com.termux/files/usr/bin/bash"),
     };
 
     let snapshot = ShellSnapshot::try_create(
@@ -156,7 +156,7 @@ async fn try_create_uses_distinct_generation_paths() -> Result<()> {
     let session_id = ThreadId::new();
     let shell = Shell {
         shell_type: ShellType::Bash,
-        shell_path: PathBuf::from("/bin/bash"),
+        shell_path: PathBuf::from("/data/data/com.termux/files/usr/bin/bash"),
     };
 
     let initial_snapshot = ShellSnapshot::try_create(
@@ -211,7 +211,7 @@ async fn snapshot_shell_does_not_inherit_stdin() -> Result<()> {
 
     let shell = Shell {
         shell_type: ShellType::Bash,
-        shell_path: PathBuf::from("/bin/bash"),
+        shell_path: PathBuf::from("/data/data/com.termux/files/usr/bin/bash"),
     };
 
     let home_display = home.display();
@@ -259,7 +259,7 @@ async fn timed_out_snapshot_shell_is_terminated() -> Result<()> {
 
     let shell = Shell {
         shell_type: ShellType::Sh,
-        shell_path: PathBuf::from("/bin/sh"),
+        shell_path: PathBuf::from("/data/data/com.termux/files/usr/bin/sh"),
     };
 
     let err = run_script_with_timeout(

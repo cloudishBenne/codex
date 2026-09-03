@@ -68,7 +68,7 @@ pub fn create_exec_command_sse_response(call_id: &str) -> anyhow::Result<String>
     let (cmd, args) = if cfg!(windows) {
         ("cmd.exe", vec!["/d", "/c", "echo hi"])
     } else {
-        ("/bin/sh", vec!["-c", "echo hi"])
+        ("/data/data/com.termux/files/usr/bin/sh", vec!["-c", "echo hi"])
     };
     let command = std::iter::once(cmd.to_string())
         .chain(args.into_iter().map(str::to_string))

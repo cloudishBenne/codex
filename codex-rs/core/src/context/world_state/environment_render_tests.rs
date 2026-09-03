@@ -19,7 +19,7 @@ use std::path::PathBuf;
 fn fake_shell_name() -> String {
     let shell = crate::shell::Shell {
         shell_type: ShellType::Bash,
-        shell_path: PathBuf::from("/bin/bash"),
+        shell_path: PathBuf::from("/data/data/com.termux/files/usr/bin/bash"),
     };
     shell.name().to_string()
 }

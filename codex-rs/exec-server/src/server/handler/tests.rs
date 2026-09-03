@@ -65,7 +65,7 @@ fn shell_argv(unix_script: &str, windows_script: &str) -> Vec<String> {
         ]
     } else {
         vec![
-            "/bin/sh".to_string(),
+            "/data/data/com.termux/files/usr/bin/sh".to_string(),
             "-c".to_string(),
             unix_script.to_string(),
         ]

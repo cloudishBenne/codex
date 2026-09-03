@@ -53,7 +53,7 @@ async fn unreviewable_stdin_is_rejected_before_approval_or_execution(
         (
             "open",
             "exec_command",
-            json!({"cmd":"/bin/bash --noprofile --norc", "tty":true, "yield_time_ms":200, "sandbox_permissions":"require_escalated"}),
+            json!({"cmd":"/data/data/com.termux/files/usr/bin/bash --noprofile --norc", "tty":true, "yield_time_ms":200, "sandbox_permissions":"require_escalated"}),
         ),
         (
             "rejected",

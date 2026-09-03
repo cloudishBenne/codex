@@ -725,7 +725,7 @@ async fn assert_plugin_measurement_analytics(remote: bool, background: bool) -> 
     let codex_home = TempDir::new()?;
     let script_path = write_curated_metrics_plugin(codex_home.path())?.canonicalize()?;
     let mut command = vec![
-        "/bin/sh".to_string(),
+        "/data/data/com.termux/files/usr/bin/sh".to_string(),
         script_path.to_string_lossy().into_owned(),
     ];
     if background {

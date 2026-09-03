@@ -1377,7 +1377,7 @@ async fn unified_exec_emits_terminal_interaction_for_write_stdin(
 
     let open_call_id = "uexec-open";
     let mut open_args = json!({
-        "cmd": "/bin/bash -i",
+        "cmd": "/data/data/com.termux/files/usr/bin/bash -i",
         "yield_time_ms": 200,
         "tty": true,
     });
@@ -3935,9 +3935,9 @@ fn assert_command(command: &[String], expected_args: &str, expected_cmd: &str) {
     assert_eq!(command.len(), 3);
     let shell_path = &command[0];
     assert!(
-        shell_path == "/bin/bash"
-            || shell_path == "/usr/bin/bash"
-            || shell_path == "/usr/local/bin/bash"
+        shell_path == "/data/data/com.termux/files/usr/bin/bash"
+            || shell_path == "/usr/data/data/com.termux/files/usr/bin/bash"
+            || shell_path == "/usr/local/data/data/com.termux/files/usr/bin/bash"
             || shell_path.ends_with("/bash"),
         "unexpected bash path: {shell_path}"
     );

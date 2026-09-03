@@ -1991,7 +1991,7 @@ fn derive_requested_execpolicy_amendment_returns_none_for_shell_and_powershell_v
         vec!["sh".to_string(), "-c".to_string()],
         vec!["sh".to_string(), "-lc".to_string()],
         vec!["zsh".to_string(), "-lc".to_string()],
-        vec!["/bin/bash".to_string(), "-lc".to_string()],
+        vec!["/data/data/com.termux/files/usr/bin/bash".to_string(), "-lc".to_string()],
         vec!["/bin/zsh".to_string(), "-lc".to_string()],
         vec!["pwsh".to_string()],
         vec!["pwsh".to_string(), "-Command".to_string()],

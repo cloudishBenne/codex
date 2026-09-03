@@ -393,7 +393,7 @@ async fn persisted_remote_plugin_command_attribution_flows_through_turn_context(
     } else {
         test_codex()
     };
-    let command = shlex::try_join(["/bin/sh", script_path.to_string_lossy().as_ref()])?;
+    let command = shlex::try_join(["/data/data/com.termux/files/usr/bin/sh", script_path.to_string_lossy().as_ref()])?;
     let call_id = "remote-plugin-command";
     let arguments = serde_json::to_string(&serde_json::json!({
         "cmd": command,

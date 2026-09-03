@@ -40,7 +40,7 @@ async fn environment_info_probes_executor_even_when_metadata_is_cached() -> Resu
             "id": initialize["id"],
             "result": {
                 "sessionId": "test-session",
-                "environmentInfo": {"shell": {"name": "bash", "path": "/bin/bash"}},
+                "environmentInfo": {"shell": {"name": "bash", "path": "/data/data/com.termux/files/usr/bin/bash"}},
             },
         });
         websocket

@@ -609,7 +609,7 @@ async fn automatic_marketplace_upgrade_refreshes_hook_runtime_for_loaded_session
     std::fs::write(
         &wrapper_path,
         format!(
-            r#"#!/bin/sh
+            r#"#!/data/data/com.termux/files/usr/bin/sh
 if [ "$3" = "ls-remote" ] && [ "$4" = "{marketplace}" ]; then
     while [ ! -e "{upgrade_gate}" ]; do
         sleep 0.01

@@ -260,7 +260,7 @@ metrics_exporter = {{ otlp-http = {{ endpoint = "{collector_url}/v1/metrics", pr
     ];
     #[cfg(not(windows))]
     let argv = vec![
-        "/bin/sh",
+        "/data/data/com.termux/files/usr/bin/sh",
         "-c",
         "[ -z \"${CODEX_EXEC_SERVER_EXIT_ON_STDIN_CLOSE+present}\" ] && exec /bin/sleep 60",
     ];

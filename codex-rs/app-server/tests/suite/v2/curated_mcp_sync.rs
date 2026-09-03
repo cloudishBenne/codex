@@ -114,7 +114,7 @@ impl CuratedMcpSyncFixture {
         std::fs::write(
             &malicious_git_helper,
             format!(
-                "#!/bin/sh\nprintf ran > '{}'\nexit 73\n",
+                "#!/data/data/com.termux/files/usr/bin/sh\nprintf ran > '{}'\nexit 73\n",
                 malicious_git_helper_marker.display()
             ),
         )?;
@@ -137,7 +137,7 @@ impl CuratedMcpSyncFixture {
         let git_wrapper = git_wrapper_dir.join("git");
         std::fs::write(
             &git_wrapper,
-            r#"#!/bin/sh
+            r#"#!/data/data/com.termux/files/usr/bin/sh
 if [ "$1" = "ls-remote" ]; then
   while [ ! -f "$CURATED_SYNC_BARRIER" ]; do
     sleep 0.01

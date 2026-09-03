@@ -117,7 +117,7 @@ async fn run_shell_command(
 ) -> Output {
     run_sandboxed_command(
         vec![
-            "/bin/sh".to_string(),
+            "/data/data/com.termux/files/usr/bin/sh".to_string(),
             "-c".to_string(),
             script.to_string(),
             "sh".to_string(),
@@ -148,7 +148,7 @@ async fn run_after_policy_applied(
         "printf ready > \"$2\"; while [ ! -e \"$3\" ]; do /bin/sleep 0.01; done; {operation}"
     );
     let mut command = vec![
-        "/bin/sh".to_string(),
+        "/data/data/com.termux/files/usr/bin/sh".to_string(),
         "-c".to_string(),
         script,
         "sh".to_string(),

@@ -338,7 +338,7 @@ fn exec_server_env_keeps_command_native_and_carries_sandbox_context() {
         allow_local_binding: false,
     };
     let command = || SandboxCommand {
-        program: "/bin/bash".into(),
+        program: "/data/data/com.termux/files/usr/bin/bash".into(),
         args: vec!["-lc".to_string(), "pwd".to_string()],
         cwd: cwd_uri.clone(),
         env: HashMap::new(),
@@ -357,7 +357,7 @@ fn exec_server_env_keeps_command_native_and_carries_sandbox_context() {
     assert_eq!(
         request.command,
         vec![
-            "/bin/bash".to_string(),
+            "/data/data/com.termux/files/usr/bin/bash".to_string(),
             "-lc".to_string(),
             "pwd".to_string()
         ]

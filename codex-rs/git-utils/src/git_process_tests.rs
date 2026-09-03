@@ -23,7 +23,7 @@ async fn assert_timed_out_git_wrapper_does_not_leave_child_process_running(
     let release_wrapper_file = temp_dir.path().join("release-wrapper");
     #[cfg(unix)]
     let mut command = {
-        let mut command = Command::new("/bin/sh");
+        let mut command = Command::new("/data/data/com.termux/files/usr/bin/sh");
         let wrapper_command = match wrapper_lifetime {
             GitWrapperLifetime::WaitForChild => {
                 r#"( : > "$CHILD_READY_FILE"; while [ ! -f "$RELEASE_CHILD_FILE" ]; do sleep 0.01; done; sleep 1; : > "$CHILD_SURVIVED_FILE"; sleep 60 ) & child_pid=$!; printf '%s\n' "$child_pid" > "$CHILD_PID_FILE"; wait "$child_pid""#

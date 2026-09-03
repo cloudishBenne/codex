@@ -357,7 +357,7 @@ fn process_platform_defaults_allow_scratch_without_granting_it_to_filesystem_hel
         let scratch_file = scratch.path().join("scratch.txt");
         let process_result = run_sandboxed(
             vec![
-                "/bin/sh".to_string(),
+                "/data/data/com.termux/files/usr/bin/sh".to_string(),
                 "-c".to_string(),
                 "printf '%s' 'scratch-access' > \"$1\" && /bin/cat \"$1\"".to_string(),
                 "seatbelt-scratch".to_string(),
@@ -1925,7 +1925,7 @@ fn seatbelt_prevents_writable_root_replacement() {
         exclude_slash_tmp: true,
     };
     let shell_command = vec![
-        "/bin/sh".to_string(),
+        "/data/data/com.termux/files/usr/bin/sh".to_string(),
         "-c".to_string(),
         "rm -rf \"$PWD\" && ln -s \"$1\" \"$PWD\"".to_string(),
         "sh".to_string(),
@@ -2023,7 +2023,7 @@ fn seatbelt_allows_file_root_replacement_and_deletion() {
     let policy = restricted_write_policy(&[target.as_path(), replacement.as_path()]);
     let args = create_seatbelt_command_args(CreateSeatbeltCommandArgsParams {
         command: vec![
-            "/bin/sh".to_string(),
+            "/data/data/com.termux/files/usr/bin/sh".to_string(),
             "-c".to_string(),
             "mv \"$1\" \"$2\" && test \"$(cat \"$2\")\" = after && rm \"$2\"".to_string(),
             "sh".to_string(),
@@ -2082,7 +2082,7 @@ fn seatbelt_file_root_does_not_follow_replacement_symlink() {
     let policy = restricted_write_policy(&[writable_file.as_path()]);
     let args = create_seatbelt_command_args(CreateSeatbeltCommandArgsParams {
         command: vec![
-            "/bin/sh".to_string(),
+            "/data/data/com.termux/files/usr/bin/sh".to_string(),
             "-c".to_string(),
             "printf escaped > \"$1\"".to_string(),
             "sh".to_string(),
@@ -2176,7 +2176,7 @@ fn seatbelt_does_not_follow_rebound_writable_root_ancestor() {
     let policy = restricted_write_policy(&[writable_root.as_path()]);
     let args = create_seatbelt_command_args(CreateSeatbeltCommandArgsParams {
         command: vec![
-            "/bin/sh".to_string(),
+            "/data/data/com.termux/files/usr/bin/sh".to_string(),
             "-c".to_string(),
             "printf escaped > \"$1\"".to_string(),
             "sh".to_string(),
@@ -2263,7 +2263,7 @@ fn seatbelt_protects_writable_root_created_as_directory() {
     let policy = restricted_write_policy(&[writable_root.as_path(), progress.as_path()]);
     let args = create_seatbelt_command_args(CreateSeatbeltCommandArgsParams {
         command: vec![
-            "/bin/sh".to_string(),
+            "/data/data/com.termux/files/usr/bin/sh".to_string(),
             "-c".to_string(),
             "mkdir \"$1\" && touch \"$1/file\" && printf ok > \"$2\" && rm \"$1/file\" && rmdir \"$1\"".to_string(),
             "sh".to_string(),
@@ -2318,7 +2318,7 @@ fn seatbelt_protects_resolved_target_of_symlinked_metadata_directory() {
     let policy = restricted_write_policy(&[writable_root.as_path()]);
     let args = create_seatbelt_command_args(CreateSeatbeltCommandArgsParams {
         command: vec![
-            "/bin/sh".to_string(),
+            "/data/data/com.termux/files/usr/bin/sh".to_string(),
             "-c".to_string(),
             "printf escaped > \"$1\"".to_string(),
             "sh".to_string(),

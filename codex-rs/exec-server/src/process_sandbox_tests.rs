@@ -51,7 +51,7 @@ async fn sandbox_request_wraps_native_argv_on_executor() {
     let params = ExecParams {
         process_id: ProcessId::from("process-1"),
         argv: vec![
-            "/bin/bash".to_string(),
+            "/data/data/com.termux/files/usr/bin/bash".to_string(),
             "-lc".to_string(),
             "pwd".to_string(),
         ],
@@ -124,7 +124,7 @@ async fn sandbox_request_routes_custom_arg0_to_inner_helper() {
     );
     let params = ExecParams {
         process_id: ProcessId::from("process-custom-arg0"),
-        argv: vec!["/bin/sh".to_string(), "-c".to_string(), "true".to_string()],
+        argv: vec!["/data/data/com.termux/files/usr/bin/sh".to_string(), "-c".to_string(), "true".to_string()],
         cwd: cwd_uri,
         shell_snapshot: None,
         env_policy: None,
@@ -158,7 +158,7 @@ async fn sandbox_request_routes_custom_arg0_to_inner_helper() {
         [
             CODEX_ARG0_EXEC_HELPER_ARG1,
             "custom-arg0",
-            "/bin/sh",
+            "/data/data/com.termux/files/usr/bin/sh",
             "-c",
             "true",
         ]

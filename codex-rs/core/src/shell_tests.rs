@@ -105,15 +105,15 @@ fn shell_works(shell: Option<Shell>, command: &str, required: bool) -> bool {
 fn derive_exec_args() {
     let test_bash_shell = Shell {
         shell_type: ShellType::Bash,
-        shell_path: PathBuf::from("/bin/bash"),
+        shell_path: PathBuf::from("/data/data/com.termux/files/usr/bin/bash"),
     };
     assert_eq!(
         test_bash_shell.derive_exec_args("echo hello", /*use_login_shell*/ false),
-        vec!["/bin/bash", "-c", "echo hello"]
+        vec!["/data/data/com.termux/files/usr/bin/bash", "-c", "echo hello"]
     );
     assert_eq!(
         test_bash_shell.derive_exec_args("echo hello", /*use_login_shell*/ true),
-        vec!["/bin/bash", "-lc", "echo hello"]
+        vec!["/data/data/com.termux/files/usr/bin/bash", "-lc", "echo hello"]
     );
 
     let test_zsh_shell = Shell {

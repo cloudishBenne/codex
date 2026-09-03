@@ -161,7 +161,7 @@ fn write_marker_script(path: &Path, marker: &Path) -> Result<()> {
     let marker = marker.to_str().context("marker path is not valid UTF-8")?;
     fs::write(
         path,
-        format!("#!/bin/sh\nprintf executed > '{marker}'\ncat\n"),
+        format!("#!/data/data/com.termux/files/usr/bin/sh\nprintf executed > '{marker}'\ncat\n"),
     )?;
     fs::set_permissions(path, fs::Permissions::from_mode(0o755))?;
     Ok(())

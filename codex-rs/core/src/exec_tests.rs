@@ -260,7 +260,7 @@ async fn exec_full_buffer_capture_ignores_expiration() -> Result<()> {
     ];
     #[cfg(not(windows))]
     let command = vec![
-        "/bin/sh".to_string(),
+        "/data/data/com.termux/files/usr/bin/sh".to_string(),
         "-c".to_string(),
         "sleep 0.05; printf hello".to_string(),
     ];
@@ -302,7 +302,7 @@ async fn exec_full_buffer_capture_keeps_io_drain_timeout_when_descendant_holds_p
         exec(
             ExecParams {
                 command: vec![
-                    "/bin/sh".to_string(),
+                    "/data/data/com.termux/files/usr/bin/sh".to_string(),
                     "-c".to_string(),
                     "printf hello; sleep 30 &".to_string(),
                 ],
@@ -344,7 +344,7 @@ async fn process_exec_tool_call_preserves_full_buffer_capture_policy() -> Result
     ];
     #[cfg(not(windows))]
     let command = vec![
-        "/bin/sh".to_string(),
+        "/data/data/com.termux/files/usr/bin/sh".to_string(),
         "-c".to_string(),
         format!("sleep 0.05; head -c {byte_count} /dev/zero | tr '\\0' 'a'"),
     ];
@@ -1095,17 +1095,17 @@ fn sandbox_detection_flags_sigsys_exit_code() {
 #[cfg(unix)]
 #[tokio::test]
 async fn kill_child_process_group_kills_grandchildren_on_timeout() -> Result<()> {
-    // On Linux/macOS, /bin/bash is typically present; on FreeBSD/OpenBSD,
-    // prefer /bin/sh to avoid NotFound errors.
+    // On Linux/macOS, /data/data/com.termux/files/usr/bin/bash is typically present; on FreeBSD/OpenBSD,
+    // prefer /data/data/com.termux/files/usr/bin/sh to avoid NotFound errors.
     #[cfg(any(target_os = "freebsd", target_os = "openbsd"))]
     let command = vec![
-        "/bin/sh".to_string(),
+        "/data/data/com.termux/files/usr/bin/sh".to_string(),
         "-c".to_string(),
         "sleep 60 & echo $!; sleep 60".to_string(),
     ];
     #[cfg(all(unix, not(any(target_os = "freebsd", target_os = "openbsd"))))]
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-c".to_string(),
         "sleep 60 & echo $!; sleep 60".to_string(),
     ];
@@ -1216,7 +1216,7 @@ async fn process_exec_tool_call_cancellation_allows_sigterm_cleanup() -> Result<
     // The parent handles TERM and records cleanup, while a TERM-ignoring child
     // proves cancellation still escalates any survivors in the process group.
     let command = vec![
-        "/bin/sh".to_string(),
+        "/data/data/com.termux/files/usr/bin/sh".to_string(),
         "-c".to_string(),
         r#"(trap '' TERM; sleep 60) &
 printf '%s' "$!" > "$DESCENDANT_PID_MARKER"
@@ -1320,7 +1320,7 @@ while :; do sleep 1; done"#
 #[cfg(unix)]
 fn long_running_command() -> Vec<String> {
     vec![
-        "/bin/sh".to_string(),
+        "/data/data/com.termux/files/usr/bin/sh".to_string(),
         "-c".to_string(),
         "sleep 30".to_string(),
     ]

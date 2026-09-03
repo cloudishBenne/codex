@@ -1656,7 +1656,7 @@ impl ProviderAuthScript {
             let script_path = tempdir.path().join("print-token.sh");
             std::fs::write(
                 &script_path,
-                r#"#!/bin/sh
+                r#"#!/data/data/com.termux/files/usr/bin/sh
 if [ -f fail-once ]; then
     rm fail-once
     exit 1
@@ -1723,7 +1723,7 @@ move /y tokens.next tokens.txt >nul
             let script_path = tempdir.path().join("fail.sh");
             std::fs::write(
                 &script_path,
-                r#"#!/bin/sh
+                r#"#!/data/data/com.termux/files/usr/bin/sh
 exit 1
 "#,
             )?;

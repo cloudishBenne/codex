@@ -1942,7 +1942,7 @@ allow_upstream_proxy = false
                 call_id,
                 &json!({
                     "cmd": command,
-                    "shell": "/bin/sh",
+                    "shell": "/data/data/com.termux/files/usr/bin/sh",
                     "login": false,
                     "yield_time_ms": probe_timeout.as_millis(),
                 }),
@@ -5384,7 +5384,7 @@ async fn command_execution_notifications_include_trusted_plugin_id() -> Result<(
     let responses = vec![
         create_command_execution_sse_response(
             vec![
-                "/bin/sh".to_string(),
+                "/data/data/com.termux/files/usr/bin/sh".to_string(),
                 script_path.to_string_lossy().into_owned(),
             ],
             /*workdir*/ None,

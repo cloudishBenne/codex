@@ -7,7 +7,7 @@ pub(crate) fn write_fake_bwrap(bin_dir: &Path) -> anyhow::Result<PathBuf> {
     let fake_bwrap = bin_dir.join("bwrap");
     std::fs::write(
         &fake_bwrap,
-        r#"#!/bin/bash
+        r#"#!/data/data/com.termux/files/usr/bin/bash
 set -euo pipefail
 
 for arg in "$@"; do

@@ -57,7 +57,7 @@ async fn exercise_stdio_server(
         let wrapper = root.path().join("server");
         std::fs::write(
             &wrapper,
-            "#!/bin/sh\nprintf '%s' \"$0\" > argv0\nexec \"$MCP_SERVER\" \"$@\"\n",
+            "#!/data/data/com.termux/files/usr/bin/sh\nprintf '%s' \"$0\" > argv0\nexec \"$MCP_SERVER\" \"$@\"\n",
         )?;
         std::fs::set_permissions(wrapper, std::fs::Permissions::from_mode(0o755))?;
         env.insert(OsString::from("MCP_SERVER"), server.into_os_string());

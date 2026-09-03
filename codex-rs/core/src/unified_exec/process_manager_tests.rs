@@ -245,7 +245,7 @@ fn exec_server_params_use_path_uri_and_env_policy_overlay_contract() {
         scope_id: "attachment-1".to_string(),
         shell: codex_exec_server::ShellInfo {
             name: "bash".to_string(),
-            path: "/bin/bash".to_string(),
+            path: "/data/data/com.termux/files/usr/bin/bash".to_string(),
         },
     });
     let mut snapshot_env = params.env;

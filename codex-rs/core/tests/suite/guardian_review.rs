@@ -1718,7 +1718,7 @@ async fn guardian_review_session_does_not_inherit_legacy_notify() -> Result<()> 
     let notify_script = notify_dir.path().join("notify.sh");
     fs::write(
         &notify_script,
-        r#"#!/bin/bash
+        r#"#!/data/data/com.termux/files/usr/bin/bash
 set -e
 payload_path="$(dirname "${0}")/notify.jsonl"
 printf '%s\n' "${@: -1}" >> "${payload_path}""#,

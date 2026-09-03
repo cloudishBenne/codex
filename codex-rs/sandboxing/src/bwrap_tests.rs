@@ -18,7 +18,7 @@ fn system_bwrap_warning_reports_missing_system_bwrap() {
 fn system_bwrap_warning_reports_user_namespace_failures() {
     for failure in USER_NAMESPACE_FAILURES {
         let fake_bwrap = write_fake_bwrap(&format!(
-            r#"#!/bin/sh
+            r#"#!/data/data/com.termux/files/usr/bin/sh
 echo '{failure}' >&2
 exit 1
 "#
@@ -36,7 +36,7 @@ exit 1
 #[test]
 fn system_bwrap_warning_skips_unrelated_bwrap_failures() {
     let fake_bwrap = write_fake_bwrap(
-        r#"#!/bin/sh
+        r#"#!/data/data/com.termux/files/usr/bin/sh
 echo 'bwrap: Unknown option --argv0' >&2
 exit 1
 "#,
@@ -49,7 +49,7 @@ exit 1
 #[test]
 fn system_bwrap_probe_times_out_without_reporting_a_warning() {
     let fake_bwrap = write_fake_bwrap(
-        r#"#!/bin/sh
+        r#"#!/data/data/com.termux/files/usr/bin/sh
 sleep 1
 exit 0
 "#,
@@ -67,7 +67,7 @@ exit 0
 #[test]
 fn system_bwrap_probe_does_not_wait_for_descendants_holding_stderr_open() {
     let fake_bwrap = write_fake_bwrap(
-        r#"#!/bin/sh
+        r#"#!/data/data/com.termux/files/usr/bin/sh
 echo 'No permissions to create a new namespace' >&2
 sleep 1 &
 exit 1
@@ -194,7 +194,7 @@ fn write_named_fake_bwrap_in(dir: &Path) -> PathBuf {
     use std::os::unix::fs::PermissionsExt;
 
     let path = dir.join("bwrap");
-    fs::write(&path, "#!/bin/sh\n").expect("write fake bwrap");
+    fs::write(&path, "#!/data/data/com.termux/files/usr/bin/sh\n").expect("write fake bwrap");
     let permissions = fs::Permissions::from_mode(0o755);
     fs::set_permissions(&path, permissions).expect("chmod fake bwrap");
     fs::canonicalize(path).expect("canonicalize fake bwrap")

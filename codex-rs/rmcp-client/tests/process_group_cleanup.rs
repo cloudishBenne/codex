@@ -89,7 +89,7 @@ async fn drop_kills_wrapper_process_group() -> Result<()> {
     let wrapper = temp_dir.path().join("wrapper");
     fs::write(
         &wrapper,
-        "#!/bin/sh\nsleep 300 & child_pid=$!; echo \"$child_pid\" > \"$CHILD_PID_FILE\"; cat >/dev/null\n",
+        "#!/data/data/com.termux/files/usr/bin/sh\nsleep 300 & child_pid=$!; echo \"$child_pid\" > \"$CHILD_PID_FILE\"; cat >/dev/null\n",
     )?;
     fs::set_permissions(wrapper, fs::Permissions::from_mode(0o755))?;
 

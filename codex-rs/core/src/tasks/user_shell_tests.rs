@@ -30,9 +30,9 @@ fn user_shell_snapshot_preserves_package_path_prepend() {
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printf '%s' \"$PATH\"".to_string(),
     ];

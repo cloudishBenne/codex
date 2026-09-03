@@ -110,7 +110,7 @@ async fn exec_server_runs_ordinary_requests_serially_by_default() -> anyhow::Res
         vec!["cmd.exe", "/D", "/C", "ping -n 601 127.0.0.1 >NUL"]
     } else {
         vec![
-            "/bin/sh",
+            "/data/data/com.termux/files/usr/bin/sh",
             "-c",
             "parent=$PPID; while kill -0 \"$parent\" 2>/dev/null; do sleep 1; done",
         ]
@@ -266,7 +266,7 @@ async fn exec_server_keeps_control_requests_live_during_long_reads_and_queued_re
         vec!["cmd.exe", "/D", "/C", "ping -n 601 127.0.0.1 >NUL"]
     } else {
         vec![
-            "/bin/sh",
+            "/data/data/com.termux/files/usr/bin/sh",
             "-c",
             "parent=$PPID; while kill -0 \"$parent\" 2>/dev/null; do sleep 1; done",
         ]
@@ -440,7 +440,7 @@ async fn exec_server_defaults_omitted_pipe_stdin_to_closed_stdin() -> anyhow::Re
         vec!["cmd.exe", "/D", "/C", "ping -n 2 127.0.0.1 >NUL"]
     } else {
         vec![
-            "/bin/sh",
+            "/data/data/com.termux/files/usr/bin/sh",
             "-c",
             "sleep 0.3; if IFS= read -r line; then printf 'read:%s\\n' \"$line\"; else printf 'eof\\n'; fi",
         ]
@@ -551,7 +551,7 @@ async fn exec_server_dedupes_retried_process_write_ids() -> anyhow::Result<()> {
         ]
     } else {
         vec![
-            "/bin/sh",
+            "/data/data/com.termux/files/usr/bin/sh",
             "-c",
             "IFS= read -r first; printf 'line:%s\\n' \"$first\"; IFS= read -r second; printf 'line:%s\\n' \"$second\"",
         ]
@@ -697,7 +697,7 @@ async fn exec_server_resumes_detached_session_without_killing_processes() -> any
     let process_argv = if cfg!(windows) {
         vec!["cmd.exe", "/D", "/C", "ping -n 6 127.0.0.1 >NUL"]
     } else {
-        vec!["/bin/sh", "-c", "sleep 5"]
+        vec!["/data/data/com.termux/files/usr/bin/sh", "-c", "sleep 5"]
     };
     let process_env = if cfg!(windows) {
         serde_json::json!({ "PATH": std::env::var("PATH")? })

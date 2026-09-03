@@ -54,7 +54,7 @@ async fn forwarder_runs_commands_and_transfers_files() -> Result<()> {
             ]
         } else {
             vec![
-                "/bin/sh".to_string(),
+                "/data/data/com.termux/files/usr/bin/sh".to_string(),
                 "-c".to_string(),
                 format!("printf '%s\\n' '{expected_output}'; exit {expected_exit}"),
             ]

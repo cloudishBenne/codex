@@ -340,7 +340,7 @@ async fn unsupported_system_bwrap_falls_back_to_bundled_bwrap() {
     let unsupported_bwrap = system_dir.join("bwrap");
     std::fs::write(
         &unsupported_bwrap,
-        "#!/bin/sh\nif [ \"$1\" = \"--help\" ]; then printf '%s\\n' '--perms'; exit 0; fi\nexit 91\n",
+        "#!/data/data/com.termux/files/usr/bin/sh\nif [ \"$1\" = \"--help\" ]; then printf '%s\\n' '--perms'; exit 0; fi\nexit 91\n",
     )
     .expect("write unsupported system bubblewrap");
     std::fs::set_permissions(&unsupported_bwrap, std::fs::Permissions::from_mode(0o755))

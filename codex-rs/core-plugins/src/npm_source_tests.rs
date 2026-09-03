@@ -20,7 +20,7 @@ fn materialize_npm_plugin_source_uses_packed_package_root() {
     fs::write(
         &fake_npm,
         format!(
-            r#"#!/bin/sh
+            r#"#!/data/data/com.termux/files/usr/bin/sh
 destination=""
 previous=""
 for argument in "$@"; do

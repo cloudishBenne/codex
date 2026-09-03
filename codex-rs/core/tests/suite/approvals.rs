@@ -3163,7 +3163,7 @@ async fn allowed_escalated_exec_command_inherits_active_permission_profile() -> 
     fs::write(
         &script_path,
         format!(
-            r#"#!/bin/sh
+            r#"#!/data/data/com.termux/files/usr/bin/sh
 # Print the inherited profile so the test can verify that it reached this script.
 printenv CODEX_PERMISSION_PROFILE
 touch {outside_path:?}
@@ -3176,7 +3176,7 @@ touch {outside_path:?}
     let script_pattern = serde_json::to_string(&script_path.to_string_lossy())?;
     fs::write(
         rules_dir.join("default.rules"),
-        format!(r#"prefix_rule(pattern=["/bin/sh", {script_pattern}], decision="allow")"#),
+        format!(r#"prefix_rule(pattern=["/data/data/com.termux/files/usr/bin/sh", {script_pattern}], decision="allow")"#),
     )?;
 
     let approval_policy = AskForApproval::OnRequest;
@@ -3188,7 +3188,7 @@ touch {outside_path:?}
     assert_active_workspace_permission_profile(&test);
 
     let call_id = "allowed-escalated-shell-inherits-permission-profile";
-    let command = format!("/bin/sh {script_path:?}");
+    let command = format!("/data/data/com.termux/files/usr/bin/sh {script_path:?}");
     let event = shell_event(
         call_id,
         &command,

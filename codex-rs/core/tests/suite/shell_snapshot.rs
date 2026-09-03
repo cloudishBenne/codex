@@ -324,7 +324,7 @@ fn assert_posix_snapshot_sections(snapshot: &str) {
 #[cfg(unix)]
 fn shell_snapshot_v2_prewarm_builder(profile_home: &Path) -> TestCodexBuilder {
     let configured_home = profile_home.to_string_lossy().into_owned();
-    let shell = get_shell_by_model_provided_path(&PathBuf::from("/bin/bash"));
+    let shell = get_shell_by_model_provided_path(&PathBuf::from("/data/data/com.termux/files/usr/bin/bash"));
     test_codex()
         .with_user_shell(shell)
         .with_config(move |config| {
@@ -768,7 +768,7 @@ async fn shell_snapshot_v2_filters_profile_secrets_without_creating_files() -> R
     )
     .await?;
     let configured_home = profile_home.path().to_string_lossy().into_owned();
-    let shell = get_shell_by_model_provided_path(&PathBuf::from("/bin/sh"));
+    let shell = get_shell_by_model_provided_path(&PathBuf::from("/data/data/com.termux/files/usr/bin/sh"));
     let builder = test_codex()
         .with_user_shell(shell)
         .with_config(move |config| {
@@ -799,7 +799,7 @@ async fn shell_snapshot_v2_filters_profile_secrets_without_creating_files() -> R
             "exec_command",
             json!({
                 "cmd": "profile_helper; case \":$PATH:\" in *\":$HOME/profile-bin:\"*) printf '|path';; *) printf '|missing';; esac; printf '|%s|%s' \"$PROFILE_ALLOWED\" \"${PROFILE_SECRET-missing}\"",
-                "shell": "/bin/bash",
+                "shell": "/data/data/com.termux/files/usr/bin/bash",
                 "yield_time_ms": 1_000,
             }),
         )
@@ -1085,7 +1085,7 @@ async fn macos_unified_exec_resolves_command_from_tied_path_snapshot() -> Result
         .join("bin");
     fs::create_dir_all(&command_dir).await?;
     let command_path = command_dir.join("snapshot-only-command");
-    fs::write(&command_path, "#!/bin/sh\nprintf tied-path-command").await?;
+    fs::write(&command_path, "#!/data/data/com.termux/files/usr/bin/sh\nprintf tied-path-command").await?;
     let mut permissions = fs::metadata(&command_path).await?.permissions();
     permissions.set_mode(0o755);
     fs::set_permissions(&command_path, permissions).await?;

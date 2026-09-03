@@ -17,7 +17,7 @@ use super::terminate_process_group_with_member_fallback;
 #[tokio::test]
 async fn denied_group_signal_terminates_owned_descendants_and_preserves_escalation() -> Result<()> {
     for leader_exited in [false, true] {
-        let mut wrapper = Command::new("/bin/sh")
+        let mut wrapper = Command::new("/data/data/com.termux/files/usr/bin/sh")
             .args([
                 "-c",
                 "trap '' TERM; /bin/sleep 30 & resistant=$!; trap - TERM; /bin/sleep 30 & sibling=$!; printf '%s %s\\n' \"$resistant\" \"$sibling\"; wait",

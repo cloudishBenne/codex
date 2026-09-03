@@ -151,7 +151,7 @@ async fn command_exec_env_overrides_merge_with_server_environment_and_support_un
     let command_request_id = mcp
         .send_command_exec_request(CommandExecParams {
             command: vec![
-                "/bin/sh".to_string(),
+                "/data/data/com.termux/files/usr/bin/sh".to_string(),
                 "-lc".to_string(),
                 "printf '%s|%s|%s|%s|%s|%s' \"$COMMAND_EXEC_BASELINE\" \"$COMMAND_EXEC_EXTRA\" \"${RUST_LOG-unset}\" \"$CODEX_HOME\" \"$OPENAI_FEDERATION_RULE_ID\" \"$openai_identity_token_file\"".to_string(),
             ],

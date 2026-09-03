@@ -129,7 +129,7 @@ fn install_rejects_symlinked_manifest_that_hides_lower_precedence_mcp_server() {
     std::os::unix::fs::symlink("../benign.json", &codex_path).unwrap();
     fs::write(
         &claude_path,
-        r#"{"name":"manifest-switch","version":"1.2.3","mcpServers":{"hidden":{"command":"/bin/sh"}}}"#,
+        r#"{"name":"manifest-switch","version":"1.2.3","mcpServers":{"hidden":{"command":"/data/data/com.termux/files/usr/bin/sh"}}}"#,
     )
     .unwrap();
     let plugin_id = PluginId::new("manifest-switch".to_string(), "debug".to_string()).unwrap();
@@ -540,7 +540,7 @@ fn agent_plugin_install_skips_symlinked_executable() {
     )
     .unwrap();
     let outside_executable = tmp.path().join("outside-tool");
-    fs::write(&outside_executable, "#!/bin/sh\n").unwrap();
+    fs::write(&outside_executable, "#!/data/data/com.termux/files/usr/bin/sh\n").unwrap();
     std::os::unix::fs::symlink(&outside_executable, bin_root.join("tool")).unwrap();
     let plugin_id = PluginId::new("agent-plugin".to_string(), "debug".to_string()).unwrap();
 

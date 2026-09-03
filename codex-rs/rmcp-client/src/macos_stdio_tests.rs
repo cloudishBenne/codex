@@ -43,7 +43,7 @@ async fn bare_script_search_matches_child_path_and_preserves_script_spelling() -
     let script = bin.join(&program);
     fs::write(
         &script,
-        "#!/bin/sh\nprintf '%s\\n' \"$0\" \"$1\" \"$MCP_TEST\"; /bin/pwd; printf diagnostic >&2; exit 23\n",
+        "#!/data/data/com.termux/files/usr/bin/sh\nprintf '%s\\n' \"$0\" \"$1\" \"$MCP_TEST\"; /bin/pwd; printf diagnostic >&2; exit 23\n",
     )?;
     fs::set_permissions(&script, fs::Permissions::from_mode(/*mode*/ 0o755))?;
     symlink(&script, root.path().join(&program))?;
@@ -85,7 +85,7 @@ async fn relative_script_preserves_paths_stdio_environment_and_process_group() -
     let script = root.path().join("actual/server");
     fs::write(
         &script,
-        "#!/bin/sh\nread -r input\nprintf '%s\\n' \"$0\" \"$1\" \"$2\" \"$MCP_TEST\" \"$input\"\nprintf diagnostic >&2\nexit 23\n",
+        "#!/data/data/com.termux/files/usr/bin/sh\nread -r input\nprintf '%s\\n' \"$0\" \"$1\" \"$2\" \"$MCP_TEST\" \"$input\"\nprintf diagnostic >&2\nexit 23\n",
     )?;
     fs::set_permissions(script, fs::Permissions::from_mode(0o755))?;
     let mut command = std::process::Command::new("./link/../server");
@@ -125,7 +125,7 @@ async fn relative_script_preserves_paths_stdio_environment_and_process_group() -
 #[tokio::test]
 async fn native_executable_preserves_argv0() -> anyhow::Result<()> {
     let root = tempfile::tempdir()?;
-    symlink("/bin/sh", root.path().join("shell"))?;
+    symlink("/data/data/com.termux/files/usr/bin/sh", root.path().join("shell"))?;
     let program = Path::new("./shell");
     let mut command = std::process::Command::new(program);
     command
@@ -164,7 +164,7 @@ async fn cancelled_wait_can_still_kill_and_reap_child() -> anyhow::Result<()> {
 #[tokio::test]
 async fn descriptor_inheritance_matches_command() -> anyhow::Result<()> {
     let root = tempfile::tempdir()?;
-    symlink("/bin/sh", root.path().join("shell"))?;
+    symlink("/data/data/com.termux/files/usr/bin/sh", root.path().join("shell"))?;
     let file = fs::File::open("/dev/null")?;
     for (operation, expected) in [
         (libc::F_DUPFD, "inherited"),
@@ -199,14 +199,14 @@ async fn descriptor_inheritance_matches_command() -> anyhow::Result<()> {
 #[tokio::test]
 async fn launch_failures_preserve_os_errors() -> anyhow::Result<()> {
     let root = tempfile::tempdir()?;
-    fs::write(root.path().join("not-executable"), "#!/bin/sh\nexit 0\n")?;
+    fs::write(root.path().join("not-executable"), "#!/data/data/com.termux/files/usr/bin/sh\nexit 0\n")?;
     for (program, cwd, errno) in [
         ("./missing", root.path().to_path_buf(), libc::ENOENT),
         ("./not-executable", root.path().to_path_buf(), libc::EACCES),
         ("missing", root.path().to_path_buf(), libc::ENOENT),
         ("not-executable", root.path().to_path_buf(), libc::EACCES),
         ("", root.path().to_path_buf(), libc::ENOENT),
-        ("/bin/sh", root.path().join("missing"), libc::ENOENT),
+        ("/data/data/com.termux/files/usr/bin/sh", root.path().join("missing"), libc::ENOENT),
     ] {
         let mut command = Command::new(program);
         command

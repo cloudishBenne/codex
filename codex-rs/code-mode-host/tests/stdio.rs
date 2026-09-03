@@ -746,7 +746,7 @@ async fn child_process_loss_cleans_up_and_rebuilds_the_shared_host() {
     std::fs::write(
         &proxy_program,
         format!(
-            "#!/bin/sh\nprintf '%s\\n' \"$$\" > '{}'\nexec '{}'\n",
+            "#!/data/data/com.termux/files/usr/bin/sh\nprintf '%s\\n' \"$$\" > '{}'\nexec '{}'\n",
             pid_path.display(),
             host_program.display()
         ),

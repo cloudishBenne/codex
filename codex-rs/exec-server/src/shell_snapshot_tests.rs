@@ -42,7 +42,7 @@ async fn snapshot_failure_retries_are_bounded_and_single_flight(
     let params = ExecParams {
         process_id: ProcessId::from("snapshot-retry"),
         argv: vec![
-            "/bin/bash".to_string(),
+            "/data/data/com.termux/files/usr/bin/bash".to_string(),
             "-lc".to_string(),
             "true".to_string(),
         ],
@@ -59,7 +59,7 @@ async fn snapshot_failure_retries_are_bounded_and_single_flight(
             scope_id: "attachment-1".to_string(),
             shell: ShellInfo {
                 name: "bash".to_string(),
-                path: "/bin/bash".to_string(),
+                path: "/data/data/com.termux/files/usr/bin/bash".to_string(),
             },
         }),
         tty: false,

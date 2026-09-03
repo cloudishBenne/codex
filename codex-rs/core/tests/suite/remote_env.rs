@@ -2954,7 +2954,7 @@ async fn exec_command_routes_to_selected_remote_environment() -> Result<()> {
         &server,
         "call-multi-env",
         json!({
-            "shell": "/bin/sh",
+            "shell": "/data/data/com.termux/files/usr/bin/sh",
             "cmd": format!("cat {remote_marker_name}"),
             "login": false,
             "yield_time_ms": 1_000,
@@ -3237,7 +3237,7 @@ async fn remote_request_permissions_grant_unblocks_later_remote_exec() -> Result
                     "exec-call",
                     "exec_command",
                     &json!({
-                        "shell": "/bin/sh",
+                        "shell": "/data/data/com.termux/files/usr/bin/sh",
                         "cmd": command,
                         "login": false,
                         "yield_time_ms": 1_000,
@@ -3686,7 +3686,7 @@ async fn apply_patch_intercepted_exec_command_routes_to_selected_remote_environm
                     call_id,
                     "exec_command",
                     &serde_json::to_string(&json!({
-                        "shell": "/bin/sh",
+                        "shell": "/data/data/com.termux/files/usr/bin/sh",
                         "cmd": command,
                         "login": false,
                         "yield_time_ms": 5_000,

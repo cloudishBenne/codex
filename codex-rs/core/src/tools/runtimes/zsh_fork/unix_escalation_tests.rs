@@ -494,7 +494,7 @@ async fn execve_permission_request_hook_short_circuits_prompt() -> anyhow::Resul
     std::fs::write(
         &script_path,
         format!(
-            "#!/bin/sh\ncat > {log_path}\nprintf '%s\\n' '{response}'\n",
+            "#!/data/data/com.termux/files/usr/bin/sh\ncat > {log_path}\nprintf '%s\\n' '{response}'\n",
             log_path = shlex::try_quote(log_path.to_string_lossy().as_ref())?,
             response = "{\"hookSpecificOutput\":{\"hookEventName\":\"PermissionRequest\",\"decision\":{\"behavior\":\"allow\"}}}",
         ),

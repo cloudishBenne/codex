@@ -130,7 +130,7 @@ fn pretrust_git_sync_ignores_repository_local_transport_config() {
     write_executable_script(
         &transport,
         &format!(
-            "#!/bin/sh\nprintf ran > '{}'\nprintf '{}\\tHEAD\\n'\n",
+            "#!/data/data/com.termux/files/usr/bin/sh\nprintf ran > '{}'\nprintf '{}\\tHEAD\\n'\n",
             marker.display(),
             TEST_CURATED_PLUGIN_SHA
         ),
@@ -158,7 +158,7 @@ fn pretrust_git_sync_ignores_repository_local_transport_config() {
     write_executable_script(
         &git_wrapper,
         &format!(
-            "#!/bin/sh\ncd '{}' || exit 1\nGIT_CONFIG_GLOBAL='{}' GIT_CONFIG_SYSTEM=/dev/null GIT_TERMINAL_PROMPT=0 exec git \"$@\"\n",
+            "#!/data/data/com.termux/files/usr/bin/sh\ncd '{}' || exit 1\nGIT_CONFIG_GLOBAL='{}' GIT_CONFIG_SYSTEM=/dev/null GIT_TERMINAL_PROMPT=0 exec git \"$@\"\n",
             repository.display(),
             global_config.display()
         ),
@@ -210,7 +210,7 @@ async fn ordinary_clone_rejects_tracked_embedded_bare_repository() {
         .expect("track nested references directory");
     std::fs::write(
         nested_source.join("payload.sh"),
-        "#!/bin/sh\nprintf ran > \"$0.ran\"\n",
+        "#!/data/data/com.termux/files/usr/bin/sh\nprintf ran > \"$0.ran\"\n",
     )
     .expect("write tracked filesystem monitor");
 
@@ -619,7 +619,7 @@ fn concurrent_syncs_serialize_fetches_without_skipping_remote_checks() {
     write_executable_script(
         &git_path,
         &format!(
-            r#"#!/bin/sh
+            r#"#!/data/data/com.termux/files/usr/bin/sh
 if [ "$1" = "-c" ] && [ "$2" = "safe.bareRepository=explicit" ]; then shift 2; fi
 printf '%s\n' "$*" >> '{}'
 if [ "$1" = "ls-remote" ]; then
@@ -777,7 +777,7 @@ fn sync_openai_plugins_repo_via_git_succeeds_with_local_rewritten_remote() {
     write_executable_script(
         &git_wrapper,
         &format!(
-            "#!/bin/sh\nprintf '%s\\n' \"$*\" >> '{}'\nGIT_CONFIG_GLOBAL='{}' exec git \"$@\"\n",
+            "#!/data/data/com.termux/files/usr/bin/sh\nprintf '%s\\n' \"$*\" >> '{}'\nGIT_CONFIG_GLOBAL='{}' exec git \"$@\"\n",
             invocation_log.display(),
             git_config_path.display()
         ),
@@ -995,7 +995,7 @@ async fn sync_openai_plugins_repo_falls_back_to_http_when_git_sync_fails() {
 
     write_executable_script(
         &git_path,
-        r#"#!/bin/sh
+        r#"#!/data/data/com.termux/files/usr/bin/sh
 echo "simulated git failure" >&2
 exit 1
 "#,
@@ -1034,7 +1034,7 @@ fn sync_openai_plugins_repo_via_git_cleans_up_staged_dir_on_fetch_failure() {
     write_executable_script(
         &git_path,
         &format!(
-            r#"#!/bin/sh
+            r#"#!/data/data/com.termux/files/usr/bin/sh
 if [ "$1" = "-c" ] && [ "$2" = "safe.bareRepository=explicit" ]; then shift 2; fi
 if [ "$1" = "ls-remote" ]; then
   printf '%s\tHEAD\n' "{sha}"
@@ -1080,7 +1080,7 @@ fn sync_openai_plugins_repo_via_git_preserves_existing_snapshot_on_validation_fa
     write_executable_script(
         &git_path,
         &format!(
-            r#"#!/bin/sh
+            r#"#!/data/data/com.termux/files/usr/bin/sh
 if [ "$1" = "-c" ] && [ "$2" = "safe.bareRepository=explicit" ]; then shift 2; fi
 if [ "$1" = "ls-remote" ]; then
   printf '%s\tHEAD\n' "{remote_sha}"

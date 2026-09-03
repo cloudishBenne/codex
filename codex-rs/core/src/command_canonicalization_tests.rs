@@ -4,7 +4,7 @@ use pretty_assertions::assert_eq;
 #[test]
 fn canonicalizes_word_only_shell_scripts_to_inner_command() {
     let command_a = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "cargo test -p codex-core".to_string(),
     ];

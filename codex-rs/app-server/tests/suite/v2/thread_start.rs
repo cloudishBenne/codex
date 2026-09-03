@@ -1941,6 +1941,6 @@ args = ["/C", "exit 1"]"#
 
 #[cfg(not(target_os = "windows"))]
 fn broken_mcp_transport_toml() -> &'static str {
-    r#"command = "/bin/sh"
+    r#"command = "/data/data/com.termux/files/usr/bin/sh"
 args = ["-c", "exit 1"]"#
 }

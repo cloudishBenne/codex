@@ -197,7 +197,7 @@ fn path_convention_splits_absolute_relative_and_bare_path_text() {
     for (convention, path, expected) in [
         (
             PathConvention::Posix,
-            "/usr/local/bin/bash",
+            "/usr/local/data/data/com.termux/files/usr/bin/bash",
             vec!["", "usr", "local", "bin", "bash"],
         ),
         (
@@ -708,13 +708,13 @@ fn basename_uses_decoded_uri_segments() {
 #[test]
 fn path_buf_uses_the_inferred_native_spelling() {
     let windows = PathUri::parse("file:///C:/Program%20Files/pwsh.exe").expect("Windows URI");
-    let posix = PathUri::parse("file:///usr/local/bin/bash").expect("POSIX URI");
+    let posix = PathUri::parse("file:///usr/local/data/data/com.termux/files/usr/bin/bash").expect("POSIX URI");
 
     assert_eq!(
         (windows.to_path_buf(), posix.to_path_buf()),
         (
             PathBuf::from(r"C:\Program Files\pwsh.exe"),
-            PathBuf::from("/usr/local/bin/bash"),
+            PathBuf::from("/usr/local/data/data/com.termux/files/usr/bin/bash"),
         )
     );
 }

@@ -19,7 +19,7 @@ fn parent_directory_traversal_is_not_a_trusted_system_shell() {
         )
     } else {
         (
-            PathBuf::from("/bin/sh"),
+            PathBuf::from("/data/data/com.termux/files/usr/bin/sh"),
             PathBuf::from("/bin/../workspace/bash"),
         )
     };

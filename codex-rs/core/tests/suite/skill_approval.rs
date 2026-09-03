@@ -161,7 +161,7 @@ async fn shell_zsh_fork_skill_scripts_ignore_declared_permissions() -> Result<()
     let allowed_path = allowed_dir.join("allowed.txt");
     let allowed_path_quoted = shlex::try_join([allowed_path.to_string_lossy().as_ref()])?;
     let script_contents = format!(
-        "#!/bin/sh\nprintf '%s' allowed > {allowed_path_quoted}\nif [ -f {allowed_path_quoted} ]; then cat {allowed_path_quoted}; fi\n"
+        "#!/data/data/com.termux/files/usr/bin/sh\nprintf '%s' allowed > {allowed_path_quoted}\nif [ -f {allowed_path_quoted} ]; then cat {allowed_path_quoted}; fi\n"
     );
     let permissions_yaml = format!(
         "permissions:\n  file_system:\n    write:\n      - \"{}\"\n",

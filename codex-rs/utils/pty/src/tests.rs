@@ -47,7 +47,7 @@ fn shell_command(program: &str) -> (String, Vec<String>) {
         (cmd, vec!["/C".to_string(), program.to_string()])
     } else {
         (
-            "/bin/sh".to_string(),
+            "/data/data/com.termux/files/usr/bin/sh".to_string(),
             vec!["-c".to_string(), program.to_string()],
         )
     }
@@ -1345,7 +1345,7 @@ async fn pty_spawn_can_preserve_inherited_fds() -> anyhow::Result<()> {
 
     let script = "printf __preserved__ >\"/dev/fd/$PRESERVED_FD\"";
     let spawned = spawn_pty_process(
-        "/bin/sh",
+        "/data/data/com.termux/files/usr/bin/sh",
         &["-c".to_string(), script.to_string()],
         Path::new("."),
         &env_map,
@@ -1512,7 +1512,7 @@ async fn pty_spawn_with_inherited_fds_supports_resize() -> anyhow::Result<()> {
     let env_map: HashMap<String, String> = std::env::vars().collect();
     let script = "stty -echo; printf 'start:%s\\n' \"$(stty size)\"; IFS= read _line; printf 'after:%s\\n' \"$(stty size)\"";
     let spawned = spawn_pty_process(
-        "/bin/sh",
+        "/data/data/com.termux/files/usr/bin/sh",
         &["-c".to_string(), script.to_string()],
         Path::new("."),
         &env_map,
@@ -1583,7 +1583,7 @@ async fn pipe_spawn_no_stdin_can_preserve_inherited_fds() -> anyhow::Result<()> 
 
     let script = "printf __pipe_preserved__ >\"/dev/fd/$PRESERVED_FD\"";
     let spawned = spawn_pipe_process_no_stdin(
-        "/bin/sh",
+        "/data/data/com.termux/files/usr/bin/sh",
         &["-c".to_string(), script.to_string()],
         Path::new("."),
         &env_map,

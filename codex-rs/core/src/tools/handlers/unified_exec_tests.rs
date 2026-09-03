@@ -70,11 +70,11 @@ fn test_get_command_uses_default_shell_when_unspecified() -> anyhow::Result<()> 
 
 #[test]
 fn test_get_command_respects_explicit_bash_shell() -> anyhow::Result<()> {
-    let json = r#"{"cmd": "echo hello", "shell": "/bin/bash"}"#;
+    let json = r#"{"cmd": "echo hello", "shell": "/data/data/com.termux/files/usr/bin/bash"}"#;
 
     let args: ExecCommandArgs = parse_arguments(json)?;
 
-    assert_eq!(args.shell.as_deref(), Some("/bin/bash"));
+    assert_eq!(args.shell.as_deref(), Some("/data/data/com.termux/files/usr/bin/bash"));
 
     let resolved = get_command(
         &args,
@@ -217,7 +217,7 @@ async fn exec_command_rejects_login_when_selected_environment_disallows_it() {
 
 #[test]
 fn test_get_command_rejects_explicit_shell_in_zsh_fork_mode() -> anyhow::Result<()> {
-    let json = r#"{"cmd": "echo hello", "shell": "/bin/bash"}"#;
+    let json = r#"{"cmd": "echo hello", "shell": "/data/data/com.termux/files/usr/bin/bash"}"#;
     let args: ExecCommandArgs = parse_arguments(json)?;
     let shell_zsh_path = AbsolutePathBuf::from_absolute_path(if cfg!(windows) {
         r"C:\opt\codex\zsh"

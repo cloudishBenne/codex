@@ -297,7 +297,7 @@ async fn editor_process_receives_buffer_in_isolated_codex_home() {
     let policy = workspace_write_policy(&[]);
     let editor_directory = paths.codex_home.join("editor");
     let editor_command = vec![
-        "/bin/sh".to_string(),
+        "/data/data/com.termux/files/usr/bin/sh".to_string(),
         "-c".to_string(),
         "case \"$2\" in \"$1\"/*) printf edited > \"$2\" ;; *) exit 88 ;; esac".to_string(),
         "editor".to_string(),
@@ -339,7 +339,7 @@ async fn editor_process_uses_protected_workspace_fallback_with_default_temporary
         .join(".codex")
         .join("editor");
     let editor_command = vec![
-        "/bin/sh".to_string(),
+        "/data/data/com.termux/files/usr/bin/sh".to_string(),
         "-c".to_string(),
         "case \"$2\" in \"$1\"/*) printf edited > \"$2\" ;; *) exit 88 ;; esac".to_string(),
         "editor".to_string(),

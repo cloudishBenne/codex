@@ -477,7 +477,7 @@ async fn sandbox_inner_stage_rejects_retained_capabilities() {
         .args([
             "--apply-seccomp-then-exec",
             "--",
-            "/bin/sh",
+            "/data/data/com.termux/files/usr/bin/sh",
             "-c",
             "printf command-ran",
         ])
@@ -1254,7 +1254,7 @@ async fn sandbox_blocks_getent() {
 #[tokio::test]
 async fn sandbox_blocks_dev_tcp_redirection() {
     // This syntax is only supported by bash and zsh. We try bash first.
-    // Fallback generic socket attempt using /bin/sh with bash‑style /dev/tcp.  Not
+    // Fallback generic socket attempt using /data/data/com.termux/files/usr/bin/sh with bash‑style /dev/tcp.  Not
     // all images ship bash, so we guard against 127 as well.
     assert_network_blocked(&["bash", "-c", "echo hi > /dev/tcp/127.0.0.1/80"]).await;
 }

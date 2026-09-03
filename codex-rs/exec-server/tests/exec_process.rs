@@ -144,9 +144,9 @@ async fn shell_snapshot_v2_filters_profile_exports_and_stays_in_memory(
     let home = TempDir::new()?;
     let cwd = PathUri::from_host_native_path(home.path())?;
     let (shell_path, profile_name) = match shell_name {
-        "bash" if automatic_startup => ("/bin/bash", ".bash-env"),
-        "bash" => ("/bin/bash", ".bashrc"),
-        "sh" => ("/bin/sh", ".snapshot-env"),
+        "bash" if automatic_startup => ("/data/data/com.termux/files/usr/bin/bash", ".bash-env"),
+        "bash" => ("/data/data/com.termux/files/usr/bin/bash", ".bashrc"),
+        "sh" => ("/data/data/com.termux/files/usr/bin/sh", ".snapshot-env"),
         "zsh" if automatic_startup => ("/bin/zsh", ".zshenv"),
         "zsh" => ("/bin/zsh", ".zshrc"),
         name => anyhow::bail!("unsupported test shell {name}"),
@@ -305,7 +305,7 @@ async fn shell_snapshot_v2_remote_managed_proxy_uses_prepared_execution_context(
             .start(ExecParams {
                 process_id: ProcessId::from(format!("managed-snapshot-{attempt}")),
                 argv: vec![
-                    "/bin/bash".to_string(),
+                    "/data/data/com.termux/files/usr/bin/bash".to_string(),
                     "-lc".to_string(),
                     "profile_helper; printf '|%s|%s|%s' \"$PROFILE_ALLOWED\" \"$CODEX_NETWORK_PROXY_ACTIVE\" \"$HTTP_PROXY\"".to_string(),
                 ],
@@ -315,7 +315,7 @@ async fn shell_snapshot_v2_remote_managed_proxy_uses_prepared_execution_context(
                     scope_id: "managed-attachment".to_string(),
                     shell: ShellInfo {
                         name: "bash".to_string(),
-                        path: "/bin/bash".to_string(),
+                        path: "/data/data/com.termux/files/usr/bin/bash".to_string(),
                     },
                 }),
                 env: HashMap::new(),
@@ -378,7 +378,7 @@ async fn shell_snapshot_v2_capture_failure_falls_back_and_retries(
     let home = TempDir::new()?;
     let cwd = PathUri::from_host_native_path(home.path())?;
     let (shell_path, profile_name) = match shell_name {
-        "bash" => ("/bin/bash", ".bashrc"),
+        "bash" => ("/data/data/com.termux/files/usr/bin/bash", ".bashrc"),
         "zsh" => ("/bin/zsh", ".zshrc"),
         name => anyhow::bail!("unsupported test shell {name}"),
     };
@@ -507,7 +507,7 @@ async fn remote_sandboxed_process_preserves_custom_arg0() -> Result<()> {
         .start(ExecParams {
             process_id: ProcessId::from("proc-custom-arg0"),
             argv: vec![
-                "/bin/sh".to_string(),
+                "/data/data/com.termux/files/usr/bin/sh".to_string(),
                 "-c".to_string(),
                 "printf '%s' \"$0\"; if /bin/cat \"$CODEX_TEST_DENIED_FILE\" >/dev/null 2>&1; then exit 42; fi"
                     .to_string(),
@@ -644,7 +644,7 @@ async fn remote_tty_process_uses_configured_sandbox_helper_with_hostile_path() -
     let file = workspace.path().join("allowed.txt");
     std::fs::write(&file, b"allowed")?;
     let hostile_helper = workspace.path().join("codex-linux-sandbox");
-    std::fs::write(&hostile_helper, b"#!/bin/sh\nprintf hostile")?;
+    std::fs::write(&hostile_helper, b"#!/data/data/com.termux/files/usr/bin/sh\nprintf hostile")?;
     let mut permissions = std::fs::metadata(&hostile_helper)?.permissions();
     permissions.set_mode(0o755);
     std::fs::set_permissions(&hostile_helper, permissions)?;
@@ -877,7 +877,7 @@ async fn assert_exec_process_streams_output(use_remote: bool) -> Result<()> {
         .start(ExecParams {
             process_id: process_id.clone().into(),
             argv: vec![
-                "/bin/sh".to_string(),
+                "/data/data/com.termux/files/usr/bin/sh".to_string(),
                 "-c".to_string(),
                 "sleep 0.05; printf 'session output\\n'".to_string(),
             ],
@@ -913,7 +913,7 @@ async fn assert_exec_process_pushes_events(use_remote: bool) -> Result<()> {
         .start(ExecParams {
             process_id: process_id.clone().into(),
             argv: vec![
-                "/bin/sh".to_string(),
+                "/data/data/com.termux/files/usr/bin/sh".to_string(),
                 "-c".to_string(),
                 "printf 'event output\\n'; sleep 0.1; printf 'event err\\n' >&2; sleep 0.1; exit 7".to_string(),
             ],
@@ -965,7 +965,7 @@ async fn assert_exec_process_replays_events_after_close(use_remote: bool) -> Res
         .start(ExecParams {
             process_id: process_id.clone().into(),
             argv: vec![
-                "/bin/sh".to_string(),
+                "/data/data/com.termux/files/usr/bin/sh".to_string(),
                 "-c".to_string(),
                 "printf 'late one\\n'; printf 'late two\\n'".to_string(),
             ],
@@ -1093,10 +1093,10 @@ async fn assert_exec_process_write_then_read(use_remote: bool) -> Result<()> {
         .start(ExecParams {
             process_id: process_id.clone().into(),
             argv: vec![
-                // Use `/bin/sh` instead of Python so this stdin round-trip test
+                // Use `/data/data/com.termux/files/usr/bin/sh` instead of Python so this stdin round-trip test
                 // stays portable across Bazel and non-macOS runners where
                 // `/usr/bin/python3` is not guaranteed to exist.
-                "/bin/sh".to_string(),
+                "/data/data/com.termux/files/usr/bin/sh".to_string(),
                 "-c".to_string(),
                 "IFS= read line; printf 'from-stdin:%s\\n' \"$line\"".to_string(),
             ],
@@ -1138,7 +1138,7 @@ async fn assert_exec_process_write_then_read_without_tty(use_remote: bool) -> Re
         .start(ExecParams {
             process_id: process_id.clone().into(),
             argv: vec![
-                "/bin/sh".to_string(),
+                "/data/data/com.termux/files/usr/bin/sh".to_string(),
                 "-c".to_string(),
                 "IFS= read line; printf 'from-stdin:%s\\n' \"$line\"".to_string(),
             ],
@@ -1236,7 +1236,7 @@ async fn assert_exec_process_rejects_write_without_pipe_stdin(use_remote: bool) 
         .start(ExecParams {
             process_id: process_id.clone().into(),
             argv: vec![
-                "/bin/sh".to_string(),
+                "/data/data/com.termux/files/usr/bin/sh".to_string(),
                 "-c".to_string(),
                 "sleep 0.3; if IFS= read -r line; then printf 'read:%s\\n' \"$line\"; else printf 'eof\\n'; fi".to_string(),
             ],
@@ -1275,7 +1275,7 @@ async fn assert_exec_process_signal_interrupts_process(use_remote: bool) -> Resu
         .start(ExecParams {
             process_id: process_id.clone().into(),
             argv: vec![
-                "/bin/sh".to_string(),
+                "/data/data/com.termux/files/usr/bin/sh".to_string(),
                 "-c".to_string(),
                 "trap 'printf \"signal:2\\n\"; exit 7' INT; printf 'ready\\n'; while :; do :; done".to_string(),
             ],
@@ -1370,7 +1370,7 @@ async fn assert_exec_process_preserves_queued_events_before_subscribe(
         .start(ExecParams {
             process_id: ProcessId::from("proc-queued"),
             argv: vec![
-                "/bin/sh".to_string(),
+                "/data/data/com.termux/files/usr/bin/sh".to_string(),
                 "-c".to_string(),
                 "printf 'queued output\\n'".to_string(),
             ],
@@ -1415,7 +1415,7 @@ async fn remote_exec_process_recovers_after_transport_disconnect() -> Result<()>
         .start(ExecParams {
             process_id: ProcessId::from("proc-recover"),
             argv: vec![
-                "/bin/sh".to_string(),
+                "/data/data/com.termux/files/usr/bin/sh".to_string(),
                 "-c".to_string(),
                 concat!(
                     "printf 'ready:%s\\n' \"$$\"; ",

@@ -8,7 +8,7 @@ use tempfile::tempdir;
 
 #[test]
 fn bash_snapshot_filters_invalid_exports() -> Result<()> {
-    let output = Command::new("/bin/bash")
+    let output = Command::new("/data/data/com.termux/files/usr/bin/bash")
         .arg("-c")
         .arg(snapshot_script(ShellType::Bash).expect("bash supports snapshots"))
         .env("BASH_ENV", "/dev/null")
@@ -32,7 +32,7 @@ fn bash_snapshot_filters_invalid_exports() -> Result<()> {
 #[test]
 fn bash_snapshot_preserves_multiline_exports() -> Result<()> {
     let multiline_cert = "-----BEGIN CERTIFICATE-----\nabc\n-----END CERTIFICATE-----";
-    let output = Command::new("/bin/bash")
+    let output = Command::new("/data/data/com.termux/files/usr/bin/bash")
         .arg("-c")
         .arg(snapshot_script(ShellType::Bash).expect("bash supports snapshots"))
         .env("BASH_ENV", "/dev/null")
@@ -51,7 +51,7 @@ fn bash_snapshot_preserves_multiline_exports() -> Result<()> {
     let snapshot_path = dir.path().join("snapshot.sh");
     std::fs::write(&snapshot_path, stdout.as_bytes())?;
 
-    let validate = Command::new("/bin/bash")
+    let validate = Command::new("/data/data/com.termux/files/usr/bin/bash")
         .arg("-c")
         .arg("set -e; . \"$1\"")
         .arg("bash")

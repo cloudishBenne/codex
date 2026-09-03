@@ -323,7 +323,7 @@ fn maybe_wrap_shell_lc_with_snapshot_bootstraps_in_user_shell() {
     let (session_shell, shell_snapshot) =
         shell_with_snapshot(ShellType::Zsh, "/bin/zsh", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "echo hello".to_string(),
     ];
@@ -340,7 +340,7 @@ fn maybe_wrap_shell_lc_with_snapshot_bootstraps_in_user_shell() {
     assert_eq!(rewritten[0], "/bin/zsh");
     assert_eq!(rewritten[1], "-c");
     assert!(rewritten[2].contains("if . '"));
-    assert!(rewritten[2].contains("exec '/bin/bash' -c 'echo hello'"));
+    assert!(rewritten[2].contains("exec '/data/data/com.termux/files/usr/bin/bash' -c 'echo hello'"));
 }
 
 #[test]
@@ -351,7 +351,7 @@ fn maybe_wrap_shell_lc_with_snapshot_escapes_single_quotes() {
     let (session_shell, shell_snapshot) =
         shell_with_snapshot(ShellType::Zsh, "/bin/zsh", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "echo 'hello'".to_string(),
     ];
@@ -365,7 +365,7 @@ fn maybe_wrap_shell_lc_with_snapshot_escapes_single_quotes() {
         &RuntimePathPrepends::default(),
     );
 
-    assert!(rewritten[2].contains(r#"exec '/bin/bash' -c 'echo '"'"'hello'"'"''"#));
+    assert!(rewritten[2].contains(r#"exec '/data/data/com.termux/files/usr/bin/bash' -c 'echo '"'"'hello'"'"''"#));
 }
 
 #[test]
@@ -374,7 +374,7 @@ fn maybe_wrap_shell_lc_with_snapshot_uses_bash_bootstrap_shell() {
     let snapshot_path = dir.path().join("snapshot.sh");
     std::fs::write(&snapshot_path, "# Snapshot file\n").expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
         "/bin/zsh".to_string(),
         "-lc".to_string(),
@@ -390,7 +390,7 @@ fn maybe_wrap_shell_lc_with_snapshot_uses_bash_bootstrap_shell() {
         &RuntimePathPrepends::default(),
     );
 
-    assert_eq!(rewritten[0], "/bin/bash");
+    assert_eq!(rewritten[0], "/data/data/com.termux/files/usr/bin/bash");
     assert_eq!(rewritten[1], "-c");
     assert!(rewritten[2].contains("if . '"));
     assert!(rewritten[2].contains("exec '/bin/zsh' -c 'echo hello'"));
@@ -402,9 +402,9 @@ fn maybe_wrap_shell_lc_with_snapshot_uses_sh_bootstrap_shell() {
     let snapshot_path = dir.path().join("snapshot.sh");
     std::fs::write(&snapshot_path, "# Snapshot file\n").expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Sh, "/bin/sh", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Sh, "/data/data/com.termux/files/usr/bin/sh", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "echo hello".to_string(),
     ];
@@ -418,10 +418,10 @@ fn maybe_wrap_shell_lc_with_snapshot_uses_sh_bootstrap_shell() {
         &RuntimePathPrepends::default(),
     );
 
-    assert_eq!(rewritten[0], "/bin/sh");
+    assert_eq!(rewritten[0], "/data/data/com.termux/files/usr/bin/sh");
     assert_eq!(rewritten[1], "-c");
     assert!(rewritten[2].contains("if . '"));
-    assert!(rewritten[2].contains("exec '/bin/bash' -c 'echo hello'"));
+    assert!(rewritten[2].contains("exec '/data/data/com.termux/files/usr/bin/bash' -c 'echo hello'"));
 }
 
 #[test]
@@ -432,7 +432,7 @@ fn maybe_wrap_shell_lc_with_snapshot_preserves_trailing_args() {
     let (session_shell, shell_snapshot) =
         shell_with_snapshot(ShellType::Zsh, "/bin/zsh", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printf '%s %s' \"$0\" \"$1\"".to_string(),
         "arg0".to_string(),
@@ -450,7 +450,7 @@ fn maybe_wrap_shell_lc_with_snapshot_preserves_trailing_args() {
 
     assert!(
         rewritten[2]
-            .contains(r#"exec '/bin/bash' -c 'printf '"'"'%s %s'"'"' "$0" "$1"' 'arg0' 'arg1'"#)
+            .contains(r#"exec '/data/data/com.termux/files/usr/bin/bash' -c 'printf '"'"'%s %s'"'"' "$0" "$1"' 'arg0' 'arg1'"#)
     );
 }
 
@@ -464,9 +464,9 @@ fn maybe_wrap_shell_lc_with_snapshot_restores_explicit_override_precedence() {
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printf '%s|%s' \"$TEST_ENV_SNAPSHOT\" \"${SNAPSHOT_ONLY-unset}\"".to_string(),
     ];
@@ -503,9 +503,9 @@ fn maybe_wrap_shell_lc_with_snapshot_restores_codex_thread_id_from_env() {
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printf '%s' \"$CODEX_THREAD_ID\"".to_string(),
     ];
@@ -537,9 +537,9 @@ fn maybe_wrap_shell_lc_with_snapshot_restores_permission_profile_from_env() {
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printenv CODEX_PERMISSION_PROFILE".to_string(),
     ];
@@ -575,9 +575,9 @@ fn maybe_wrap_shell_lc_with_snapshot_unsets_absent_permission_profile() {
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printenv CODEX_PERMISSION_PROFILE".to_string(),
     ];
@@ -609,9 +609,9 @@ fn maybe_wrap_shell_lc_with_snapshot_restores_apply_patch_rollout_state() {
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printenv CODEX_APPLY_PATCH_PRESERVE_LINE_ENDINGS".to_string(),
     ];
@@ -664,9 +664,9 @@ fn maybe_wrap_shell_lc_with_snapshot_restores_reserved_metrics_output_env() {
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printf '%s' \"${CODEX_PLUGIN_METRICS_OUTPUT-unset}\"".to_string(),
     ];
@@ -712,9 +712,9 @@ fn maybe_wrap_shell_lc_with_snapshot_restores_proxy_env_from_process_env() {
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printf '%s\\n%s\\n%s\\n%s' \"$PIP_PROXY\" \"$HTTP_PROXY\" \"$http_proxy\" \"$GIT_SSH_COMMAND\""
             .to_string(),
@@ -757,7 +757,7 @@ async fn snapshot_wrapper_replays_dummy_and_preserves_unbrokered_credentials() -
         &snapshot,
         "# Snapshot file\nexport OPENAI_API_KEY='stale'\nexport GITHUB_TOKEN='ghp_snapshot_only'\nexport GH_HOST='github.example.com'\n",
     )?;
-    let (shell, snapshot) = shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot.abs());
+    let (shell, snapshot) = shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot.abs());
     let mut env = HashMap::from([
         (
             "OPENAI_API_KEY".to_string(),
@@ -768,7 +768,7 @@ async fn snapshot_wrapper_replays_dummy_and_preserves_unbrokered_credentials() -
     proxy.apply_to_env(&mut env);
     let dummy = env["OPENAI_API_KEY"].clone();
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printf '%s\\n%s\\n%s' \"$OPENAI_API_KEY\" \"${GITHUB_TOKEN-unset}\" \"$GH_HOST\""
             .to_string(),
@@ -815,9 +815,9 @@ fn maybe_wrap_shell_lc_with_snapshot_refreshes_codex_proxy_git_ssh_command() {
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         format!("printf '%s' \"${PROXY_GIT_SSH_COMMAND_ENV_KEY}\""),
     ];
@@ -857,9 +857,9 @@ fn maybe_wrap_shell_lc_with_snapshot_restores_custom_git_ssh_command() {
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         format!("printf '%s' \"${PROXY_GIT_SSH_COMMAND_ENV_KEY}\""),
     ];
@@ -898,9 +898,9 @@ fn maybe_wrap_shell_lc_with_snapshot_clears_stale_codex_git_ssh_command_without_
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         format!(
             "if [ \"${{{PROXY_GIT_SSH_COMMAND_ENV_KEY}+x}}\" = x ]; then printf 'set'; else printf 'unset'; fi"
@@ -934,9 +934,9 @@ fn maybe_wrap_shell_lc_with_snapshot_keeps_user_proxy_env_when_proxy_inactive() 
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printf '%s' \"$HTTP_PROXY\"".to_string(),
     ];
@@ -977,9 +977,9 @@ fn maybe_wrap_shell_lc_with_snapshot_restores_live_env_when_snapshot_proxy_activ
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         format!(
             "if [ \"${{PIP_PROXY+x}}\" = x ]; then printf 'pip:%s\\n' \"$PIP_PROXY\"; else printf 'pip:unset\\n'; fi; \
@@ -1023,9 +1023,9 @@ fn maybe_wrap_shell_lc_with_snapshot_keeps_snapshot_path_without_override() {
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printf '%s' \"$PATH\"".to_string(),
     ];
@@ -1056,9 +1056,9 @@ fn maybe_wrap_shell_lc_with_snapshot_applies_explicit_path_override() {
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printf '%s' \"$PATH\"".to_string(),
     ];
@@ -1122,9 +1122,9 @@ fn run_snapshot_path_probe_with_runtime_path_prepend(
         "# Snapshot file\nexport PATH='/snapshot/bin'\n",
     )?;
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printf '%s' \"$PATH\"".to_string(),
     ];
@@ -1166,9 +1166,9 @@ fn maybe_wrap_shell_lc_with_snapshot_preserves_zsh_fork_path_prepend() {
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printf '%s' \"$PATH\"".to_string(),
     ];
@@ -1215,9 +1215,9 @@ fn maybe_wrap_shell_lc_with_snapshot_does_not_embed_override_values_in_argv() {
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-        "/bin/bash".to_string(),
+        "/data/data/com.termux/files/usr/bin/bash".to_string(),
         "-lc".to_string(),
         "printf '%s' \"$OPENAI_API_KEY\"".to_string(),
     ];
@@ -1267,9 +1267,9 @@ fn maybe_wrap_shell_lc_with_snapshot_preserves_unset_override_variables() {
     )
     .expect("write snapshot");
     let (session_shell, shell_snapshot) =
-        shell_with_snapshot(ShellType::Bash, "/bin/bash", snapshot_path.abs());
+        shell_with_snapshot(ShellType::Bash, "/data/data/com.termux/files/usr/bin/bash", snapshot_path.abs());
     let command = vec![
-            "/bin/bash".to_string(),
+            "/data/data/com.termux/files/usr/bin/bash".to_string(),
             "-lc".to_string(),
             "if [ \"${CODEX_TEST_UNSET_OVERRIDE+x}\" = x ]; then printf 'set:%s' \"$CODEX_TEST_UNSET_OVERRIDE\"; else printf 'unset'; fi".to_string(),
         ];

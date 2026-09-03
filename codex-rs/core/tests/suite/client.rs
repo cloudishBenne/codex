@@ -744,7 +744,7 @@ impl ProviderAuthCommandFixture {
             let script_path = tempdir.path().join("print-token.sh");
             std::fs::write(
                 &script_path,
-                r#"#!/bin/sh
+                r#"#!/data/data/com.termux/files/usr/bin/sh
 if [ -f fail-until-401 ]; then
     exit 1
 fi
