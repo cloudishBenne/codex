@@ -2,9 +2,12 @@ name: Build Termux Native Binary
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - 'v*'
+    inputs:
+      sync_upstream:
+        description: 'Vor dem Build mit Upstream synchronisieren?'
+        required: true
+        type: boolean
+        default: false
 
 jobs:
   build-termux:
@@ -13,6 +16,31 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync with Upstream (optional)
+        if: ${{ inputs.sync_upstream }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git remote add upstream https://github.com/openai/codex.git || true
+          git fetch upstream main
+          git merge upstream/main --no-edit || (echo "Merge-Konflikt! Bitte manuell prüfen." && exit 1)
+
+      - name: Apply Termux Patches (Auto-Sed)
+        run: |
+          echo "Bügle Termux-Pfade über Rust-Dateien..."
+          find codex-rs -type f -name "*.rs" -exec sed -i \
+            -e 's|/bin/bash|/data/data/com.termux/files/usr/bin/bash|g' \
+            -e 's|/bin/sh|/data/data/com.termux/files/usr/bin/sh|g' {} +
+
+          # Cargo.toml tunen
+          sed -i 's/codegen-units = [0-9]*/codegen-units = 16/' codex-rs/Cargo.toml
+          sed -i 's/strip = false/strip = true/' codex-rs/Cargo.toml
+
+      - name: Fix Workspace Permissions for Docker
+        run: chmod -R 777 "${{ github.workspace }}"
 
       - name: Set up QEMU (ARM64 Emulation)
         uses: docker/setup-qemu-action@v3
@@ -30,9 +58,14 @@ jobs:
               pkg update -y && \
               pkg install -y rust binutils clang cmake make git protobuf openssl sqlite && \
               cd codex-rs && \
+              export RUST_MIN_STACK=67108864 && \
               cargo build --release -p codex-cli && \
               strip target/release/codex
             "
+
+      - name: Fix Permissions after Build
+        if: always()
+        run: sudo chmod -R 777 "${{ github.workspace }}"
 
       - name: Package Binary
         run: |
