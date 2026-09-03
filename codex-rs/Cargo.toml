@@ -579,20 +579,20 @@ strip = "symbols"
 
 [profile.release]
 lto = "thin"
-debug = "line-tables-only"
+debug = 0
 split-debuginfo = "off"
 # Keep release binaries symbolicateable until packaging has archived the
 # sidecar symbols and stripped the binaries.
-strip = false
+strip = true
 
 # Balance parallel release code generation against binary size.
-codegen-units = 4
+codegen-units = 8
 
 [profile.profiling]
 inherits = "release"
 debug = "full"
 lto = false
-strip = false
+strip = true
 
 [profile.ci-test]
 # Reduce binary size to reduce disk pressure.

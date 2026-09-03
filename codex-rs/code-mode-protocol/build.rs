@@ -5,7 +5,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("cargo:rerun-if-changed=src/grpc");
 
     let mut config = tonic_prost_build::Config::new();
-    config.protoc_executable(protoc_bin_vendored::protoc_bin_path()?);
+    config.protoc_executable(std::path::PathBuf::from("/data/data/com.termux/files/usr/bin/protoc"));
     let proto_files = glob::glob("src/grpc/*.proto")?.collect::<Result<Vec<_>, _>>()?;
 
     tonic_prost_build::configure()
