@@ -1267,7 +1267,7 @@ mod tests {
     #[test]
     fn bin_bash_lc_sed() {
         assert_parsed(
-            &shlex_split_safe("/bin/bash -lc 'sed -n '1,10p' Cargo.toml'"),
+            &shlex_split_safe("/data/data/com.termux/files/usr/bin/bash -lc 'sed -n '1,10p' Cargo.toml'"),
             vec![ParsedCommand::Read {
                 cmd: "sed -n '1,10p' Cargo.toml".to_string(),
                 name: "Cargo.toml".to_string(),

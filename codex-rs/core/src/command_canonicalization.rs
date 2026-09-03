@@ -8,7 +8,7 @@ const CANONICAL_POWERSHELL_SCRIPT_PREFIX: &str = "__codex_powershell_script__";
 /// Canonicalize command argv for approval-cache matching.
 ///
 /// This keeps approval decisions stable across wrapper-path differences (for
-/// example `/bin/bash -lc` vs `bash -lc`) and across shell wrapper tools while
+/// example `/data/data/com.termux/files/usr/bin/bash -lc` vs `bash -lc`) and across shell wrapper tools while
 /// preserving exact script text for complex scripts where we cannot safely
 /// recover a tokenized command sequence.
 pub(crate) fn canonicalize_command_for_approval(command: &[String]) -> Vec<String> {

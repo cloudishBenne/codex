@@ -79,7 +79,7 @@ mod tests {
         assert_eq!(cmdline, "echo hello");
 
         // Test absolute path to bash
-        let args = vec!["/bin/bash".into(), "-lc".into(), "echo hello".into()];
+        let args = vec!["/data/data/com.termux/files/usr/bin/bash".into(), "-lc".into(), "echo hello".into()];
         let cmdline = strip_bash_lc_and_escape(&args);
         assert_eq!(cmdline, "echo hello");
     }

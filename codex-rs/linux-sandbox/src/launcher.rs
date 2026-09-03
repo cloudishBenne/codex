@@ -304,7 +304,7 @@ mod tests {
         let fake_bwrap_path = temp_dir.path().join("bwrap");
         std::fs::write(
             &fake_bwrap_path,
-            "#!/bin/sh\nprintf '%s\\n' '--as-pid-1' '--perms' '--argv0' '--ro-bind-fd'\n",
+            "#!/data/data/com.termux/files/usr/bin/sh\nprintf '%s\\n' '--as-pid-1' '--perms' '--argv0' '--ro-bind-fd'\n",
         )
         .expect("write fake bubblewrap");
         std::fs::set_permissions(&fake_bwrap_path, std::fs::Permissions::from_mode(0o755))

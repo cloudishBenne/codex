@@ -1228,7 +1228,7 @@ mod tests {
         let mut params = test_exec_params(HashMap::new());
         params.process_id = ProcessId::from("audit-process");
         params.argv = vec![
-            "/bin/sh".to_string(),
+            "/data/data/com.termux/files/usr/bin/sh".to_string(),
             "-c".to_string(),
             "printf '%s\\n' \"$HTTP_PROXY\"; exec sleep 60".to_string(),
         ];

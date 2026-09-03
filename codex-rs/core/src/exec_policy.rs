@@ -55,12 +55,12 @@ const RULES_DIR_NAME: &str = "rules";
 const RULE_EXTENSION: &str = "rules";
 const DEFAULT_POLICY_FILE: &str = "default.rules";
 pub(crate) static BANNED_PREFIX_SUGGESTIONS: &[&[&str]] = &[
-    &["/bin/bash"],
-    &["/bin/bash", "-c"],
-    &["/bin/bash", "-lc"],
-    &["/bin/sh"],
-    &["/bin/sh", "-c"],
-    &["/bin/sh", "-lc"],
+    &["/data/data/com.termux/files/usr/bin/bash"],
+    &["/data/data/com.termux/files/usr/bin/bash", "-c"],
+    &["/data/data/com.termux/files/usr/bin/bash", "-lc"],
+    &["/data/data/com.termux/files/usr/bin/sh"],
+    &["/data/data/com.termux/files/usr/bin/sh", "-c"],
+    &["/data/data/com.termux/files/usr/bin/sh", "-lc"],
     &["/bin/zsh"],
     &["/bin/zsh", "-c"],
     &["/bin/zsh", "-lc"],

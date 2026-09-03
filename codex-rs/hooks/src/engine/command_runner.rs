@@ -430,7 +430,7 @@ fn default_shell_command(environment: &[(OsString, OsString)]) -> Command {
     let (environment_variable, fallback_program, argument) = ("COMSPEC", "cmd.exe", "/C");
 
     #[cfg(not(windows))]
-    let (environment_variable, fallback_program, argument) = ("SHELL", "/bin/sh", "-lc");
+    let (environment_variable, fallback_program, argument) = ("SHELL", "/data/data/com.termux/files/usr/bin/sh", "-lc");
 
     let program = environment
         .iter()

@@ -214,7 +214,7 @@ mod tests {
             #[cfg(unix)]
             {
                 let file = dir.join(Self::TEST_PROGRAM);
-                fs::write(&file, "#!/bin/sh\nexit 0")?;
+                fs::write(&file, "#!/data/data/com.termux/files/usr/bin/sh\nexit 0")?;
                 Self::set_executable(&file)?;
             }
 

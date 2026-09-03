@@ -1045,7 +1045,7 @@ mod tests {
                     b"{\"name\":\"linear\"}",
                     /*mode*/ 0o644,
                 ),
-                ("bin/helper", b"#!/bin/sh\n", /*mode*/ 0o755),
+                ("bin/helper", b"#!/data/data/com.termux/files/usr/bin/sh\n", /*mode*/ 0o755),
             ]),
             destination.path(),
         )

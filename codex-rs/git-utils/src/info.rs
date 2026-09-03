@@ -1070,7 +1070,7 @@ mod tests {
         let log = temp_dir.path().join("git.log");
         std::fs::write(
             &git,
-            "#!/bin/sh\n\
+            "#!/data/data/com.termux/files/usr/bin/sh\n\
              if [ \"$1\" = \"-c\" ] && [ \"$2\" = \"safe.bareRepository=explicit\" ]; then shift 2; fi\n\
              printf '%s\\n' \"$*\" >>\"$0.log\"\n\
              case \"$1\" in\n\
@@ -1136,7 +1136,7 @@ mod tests {
         let log = temp_dir.path().join("git.log");
         std::fs::write(
             &git,
-            "#!/bin/sh\n\
+            "#!/data/data/com.termux/files/usr/bin/sh\n\
              if [ \"$1\" = \"-c\" ] && [ \"$2\" = \"safe.bareRepository=explicit\" ]; then shift 2; fi\n\
              printf '%s\\n' \"$*\" >>\"$0.log\"\n\
              case \"$1\" in\n\

@@ -694,7 +694,7 @@ mod tests {
         let _guard = ESCALATE_SERVER_TEST_LOCK.acquire().await?;
         let after_spawn_invoked = Arc::new(AtomicBool::new(false));
         let server = EscalateServer::new(
-            PathBuf::from("/bin/bash"),
+            PathBuf::from("/data/data/com.termux/files/usr/bin/bash"),
             PathBuf::from("/tmp/codex-execve-wrapper"),
             DeterministicEscalationPolicy {
                 decision: EscalationDecision::run(),
@@ -818,7 +818,7 @@ mod tests {
 
         client
             .send(EscalateRequest {
-                file: PathBuf::from("/bin/sh"),
+                file: PathBuf::from("/data/data/com.termux/files/usr/bin/sh"),
                 argv: vec![
                     "sh".to_string(),
                     "-c".to_string(),
@@ -927,7 +927,7 @@ mod tests {
 
         client
             .send(EscalateRequest {
-                file: PathBuf::from("/bin/sh"),
+                file: PathBuf::from("/data/data/com.termux/files/usr/bin/sh"),
                 argv: vec![
                     "sh".to_string(),
                     "-c".to_string(),
@@ -999,7 +999,7 @@ mod tests {
 
         client
             .send(EscalateRequest {
-                file: PathBuf::from("/bin/sh"),
+                file: PathBuf::from("/data/data/com.termux/files/usr/bin/sh"),
                 argv: vec!["sh".to_string(), "-c".to_string(), "exit 0".to_string()],
                 workdir: AbsolutePathBuf::current_dir()?,
                 env: HashMap::new(),
@@ -1036,7 +1036,7 @@ mod tests {
             "test temp path should not contain single quotes: {pid_file_display}"
         );
         let server = EscalateServer::new(
-            PathBuf::from("/bin/bash"),
+            PathBuf::from("/data/data/com.termux/files/usr/bin/bash"),
             PathBuf::from("/tmp/codex-execve-wrapper"),
             DeterministicEscalationPolicy {
                 decision: EscalationDecision::escalate(EscalationExecution::Unsandboxed),
@@ -1073,7 +1073,7 @@ mod tests {
 
         client_stream
             .send(EscalateRequest {
-                file: PathBuf::from("/bin/sh"),
+                file: PathBuf::from("/data/data/com.termux/files/usr/bin/sh"),
                 argv: vec![
                     "sh".to_string(),
                     "-c".to_string(),

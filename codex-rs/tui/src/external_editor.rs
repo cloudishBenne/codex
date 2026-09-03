@@ -297,7 +297,7 @@ mod tests {
 
         let dir = tempdir().unwrap();
         let script_path = dir.path().join("edit.sh");
-        fs::write(&script_path, "#!/bin/sh\nprintf \"edited\" > \"$1\"\n").unwrap();
+        fs::write(&script_path, "#!/data/data/com.termux/files/usr/bin/sh\nprintf \"edited\" > \"$1\"\n").unwrap();
         let mut perms = fs::metadata(&script_path).unwrap().permissions();
         perms.set_mode(0o755);
         fs::set_permissions(&script_path, perms).unwrap();

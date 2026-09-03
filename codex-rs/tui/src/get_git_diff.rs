@@ -823,7 +823,7 @@ mod tests {
 
     #[cfg(unix)]
     fn write_marker_helper(path: &Path) {
-        fs::write(path, "#!/bin/sh\nprintf ran >> \"$0.ran\"\nexit 1\n")
+        fs::write(path, "#!/data/data/com.termux/files/usr/bin/sh\nprintf ran >> \"$0.ran\"\nexit 1\n")
             .expect("write helper script");
         let mut permissions = fs::metadata(path)
             .expect("read helper metadata")

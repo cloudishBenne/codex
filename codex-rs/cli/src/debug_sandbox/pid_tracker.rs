@@ -347,7 +347,7 @@ mod tests {
     async fn pid_tracker_collects_bash_subshell_descendants() {
         let tracker = PidTracker::new(std::process::id() as i32).expect("failed to create tracker");
 
-        let child = Command::new("/bin/bash")
+        let child = Command::new("/data/data/com.termux/files/usr/bin/bash")
             .arg("-c")
             .arg("(sleep 0.1 & echo $!; wait)")
             .stdin(Stdio::null())

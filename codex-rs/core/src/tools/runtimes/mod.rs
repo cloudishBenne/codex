@@ -542,7 +542,7 @@ mod prepare_powershell_command_tests {
     #[test]
     fn leaves_non_powershell_alone() {
         let command = vec![
-            "/bin/bash".to_string(),
+            "/data/data/com.termux/files/usr/bin/bash".to_string(),
             "-lc".to_string(),
             "echo ok".to_string(),
         ];

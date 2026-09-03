@@ -4140,7 +4140,7 @@ mod tests {
         use std::os::unix::fs::PermissionsExt;
 
         let file = tempfile::NamedTempFile::new().expect("create temp file");
-        std::fs::write(file.path(), "#!/bin/sh\n").expect("write temp file");
+        std::fs::write(file.path(), "#!/data/data/com.termux/files/usr/bin/sh\n").expect("write temp file");
         let mut permissions = std::fs::metadata(file.path())
             .expect("metadata")
             .permissions();

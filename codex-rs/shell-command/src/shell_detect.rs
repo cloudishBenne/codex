@@ -226,7 +226,7 @@ fn get_zsh_shell() -> Option<DetectedShell> {
     })
 }
 
-const BASH_FALLBACK_PATHS: &[&str] = &["/bin/bash", "/usr/bin/bash"];
+const BASH_FALLBACK_PATHS: &[&str] = &["/data/data/com.termux/files/usr/bin/bash", "/usr/data/data/com.termux/files/usr/bin/bash"];
 
 fn get_bash_shell() -> Option<DetectedShell> {
     let shell_path = get_shell_path(ShellType::Bash, "bash", BASH_FALLBACK_PATHS);
@@ -237,7 +237,7 @@ fn get_bash_shell() -> Option<DetectedShell> {
     })
 }
 
-const SH_FALLBACK_PATHS: &[&str] = &["/bin/sh"];
+const SH_FALLBACK_PATHS: &[&str] = &["/data/data/com.termux/files/usr/bin/sh"];
 
 fn get_sh_shell() -> Option<DetectedShell> {
     let shell_path = get_shell_path(ShellType::Sh, "sh", SH_FALLBACK_PATHS);
@@ -321,7 +321,7 @@ pub fn ultimate_fallback_shell() -> DetectedShell {
     } else {
         DetectedShell {
             shell_type: ShellType::Sh,
-            shell_path: PathBuf::from("/bin/sh"),
+            shell_path: PathBuf::from("/data/data/com.termux/files/usr/bin/sh"),
         }
     }
 }
@@ -451,11 +451,11 @@ mod tests {
             Some(ShellType::Zsh)
         );
         assert_eq!(
-            detect_shell_type(PathBuf::from("/bin/bash")),
+            detect_shell_type(PathBuf::from("/data/data/com.termux/files/usr/bin/bash")),
             Some(ShellType::Bash)
         );
         assert_eq!(
-            detect_shell_type(PathBuf::from("/usr/bin/bash")),
+            detect_shell_type(PathBuf::from("/usr/data/data/com.termux/files/usr/bin/bash")),
             Some(ShellType::Bash)
         );
         assert_eq!(
@@ -479,7 +479,7 @@ mod tests {
             Some(ShellType::PowerShell)
         );
         assert_eq!(
-            detect_shell_type(PathBuf::from("/bin/sh")),
+            detect_shell_type(PathBuf::from("/data/data/com.termux/files/usr/bin/sh")),
             Some(ShellType::Sh)
         );
         assert_eq!(detect_shell_type(PathBuf::from("sh")), Some(ShellType::Sh));

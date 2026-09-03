@@ -169,7 +169,7 @@ pub(crate) fn reexec_managed_updater(managed_codex_bin: &std::path::Path) -> Res
 async fn install_latest_standalone(http: &RouteAwareClientPool) -> Result<()> {
     let script = fetch_installer_script(http).await?;
 
-    let mut child = Command::new("/bin/sh")
+    let mut child = Command::new("/data/data/com.termux/files/usr/bin/sh")
         .arg("-s")
         .stdin(Stdio::piped())
         .stdout(Stdio::null())

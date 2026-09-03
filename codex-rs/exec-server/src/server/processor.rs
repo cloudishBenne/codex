@@ -600,7 +600,7 @@ mod tests {
             ]
         } else {
             vec![
-                "/bin/sh".to_string(),
+                "/data/data/com.termux/files/usr/bin/sh".to_string(),
                 "-c".to_string(),
                 "sleep 1; printf late".to_string(),
             ]

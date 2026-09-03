@@ -1330,7 +1330,7 @@ mod tests {
 
         if std::env::var_os(CHILD).is_none() {
             // Change umask only in the child running this one test.
-            let status = std::process::Command::new("/bin/sh")
+            let status = std::process::Command::new("/data/data/com.termux/files/usr/bin/sh")
                 .args(["-c", "umask 000; exec \"$@\"", "sh"])
                 .arg(std::env::current_exe()?)
                 .args([

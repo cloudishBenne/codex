@@ -602,7 +602,7 @@ mod tests {
         fs::write(
             &hook_path,
             format!(
-                "#!/bin/sh\nprintf ran > \"{}\"\n",
+                "#!/data/data/com.termux/files/usr/bin/sh\nprintf ran > \"{}\"\n",
                 marker_path.to_string_lossy()
             ),
         )
