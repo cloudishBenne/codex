@@ -1,0 +1,63 @@
+name: Temporary V8 150.4.0 Android Feasibility
+run-name: "V8 feasibility ${{ inputs.correlation }}"
+on:
+  workflow_dispatch:
+    inputs:
+      correlation:
+        description: Unique Termux dispatch correlation
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: termux-v8-feasibility-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  producer-consumer:
+    if: github.ref == 'refs/heads/termux/v8-producer-feasibility-v150.4.0'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Isolated producer and unchanged consumer
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -z "$(git status --porcelain=v1)"
+          export RR_ROOT="$RUNNER_TEMP/v8-feasibility-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          test ! -e "$RR_ROOT"
+          mkdir -m 700 "$RR_ROOT"
+          export CARGO_HOME="$RR_ROOT/cargo-home"
+          export RUSTUP_HOME="$RR_ROOT/rustup-home"
+          python3 scripts/termux-feasibility/ci/producer-feasibility.py
+      - name: Preserve raw evidence even after failure
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rr_root="$RUNNER_TEMP/v8-feasibility-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          mkdir -p "$RUNNER_TEMP/feasibility-return"
+          if test -d "$rr_root/evidence"; then
+            tar -C "$rr_root" -czf "$RUNNER_TEMP/feasibility-return/evidence.tar.gz" evidence logs
+            (cd "$RUNNER_TEMP/feasibility-return" && sha256sum evidence.tar.gz > evidence.tar.gz.sha256)
+          fi
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: v8-feasibility-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/feasibility-return/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Upload produced pair and diagnostic host
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: v8-feasibility-pair-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/v8-feasibility-${{ github.run_id }}-${{ github.run_attempt }}/artifacts/
+          if-no-files-found: warn
+          retention-days: 14
