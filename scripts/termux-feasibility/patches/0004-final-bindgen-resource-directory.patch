@@ -1,0 +1,8 @@
+--- a/build.rs
++++ b/build.rs
+@@ -39,0 +40 @@
++    "RR_LIBCLANG_RESOURCE",
+@@ -236,0 +238,3 @@
++    let resource = env::var("RR_LIBCLANG_RESOURCE")
++      .expect("PART A requires the verified host-libclang resource directory");
++    clang_args.push(format!("-resource-dir={resource}"));

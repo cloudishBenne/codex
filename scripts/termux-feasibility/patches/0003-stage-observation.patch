@@ -1,0 +1,7 @@
+--- a/build.rs
++++ b/build.rs
+@@ -115,0 +116,2 @@
++    println!("RR_STAGE archive observed");
++    println!("RR_STAGE bindgen start");
+@@ -116,0 +119 @@
++    println!("RR_STAGE bindings observed");

@@ -18,6 +18,9 @@ import tomllib
 import urllib.parse
 import urllib.request
 import zipfile
+from observe import Observer
+from salvage import capture
+from preflight import prepare as libclang_preflight
 
 BASE = "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a"
 V8 = "5c15a6995c9bb4bacd3e341b59fff32c909c80bf"
@@ -30,11 +33,12 @@ A = ROOT / "artifacts"
 S = ROOT / "rusty-v8-src"
 C = ROOT / "codex-src"
 START = time.time()
-DEADLINE = 1788683448  # 2026-09-06 08:30:48 UTC; first run start + 180 minutes
+MODE = os.environ.get("RR_MODE", "preflight")
+assert MODE in ["preflight", "producer"]
 M = {"schema_version": 1, "result": "NOT_EVALUATED", "stage": "A0",
      "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-     "budget_minutes": 170, "max_correction_runs": 2, "correction_run": 2,
-     "prior_run": 34014758687, "deadline_utc": "2026-09-06T08:30:48Z", "part_b_entered": False,
+     "budget_minutes": 170, "max_correction_runs": 1, "correction_run": 0, "continuation": "control-v0.2", "mode": MODE,
+     "prior_run": 34015167037, "run_budget_seconds": 1800 if MODE == "preflight" else 10200, "part_b_entered": False,
      "commands": [], "downloads": [], "patches": [], "outputs": {},
      "workflow": {k: os.getenv(k) for k in ["GITHUB_SHA", "GITHUB_REF", "GITHUB_WORKFLOW_REF",
          "GITHUB_WORKFLOW_SHA", "GITHUB_RUN_ID", "GITHUB_RUN_ATTEMPT", "ImageOS", "ImageVersion"]}}
@@ -49,31 +53,11 @@ def save():
     (E / "feasibility-result.json").write_text(json.dumps(M, indent=2) + "\n")
 
 
+OBSERVER = Observer(ROOT, M, save, START, seconds=1800 if MODE == 'preflight' else 10200)
+
+
 def run(args, cwd=None, env=None, allowed=(0,)):
-    label = f"{len(M['commands']):03d}"
-    record = {"argv": [str(x) for x in args], "cwd": str(cwd or ROOT),
-              "stage": M["stage"], "log": f"logs/{label}.log", "exit": None}
-    M["commands"].append(record)
-    save()
-    print(json.dumps(record), flush=True)
-    remaining = min(170 * 60 - (time.time() - START), DEADLINE - time.time())
-    require(remaining > 0, "PART A wall-clock budget exhausted")
-    with (ROOT / record["log"]).open("wb") as f:
-        p = subprocess.Popen(record["argv"], cwd=cwd or ROOT, env=env, stdout=f, stderr=subprocess.STDOUT)
-        try:
-            record["exit"] = p.wait(timeout=remaining)
-        except subprocess.TimeoutExpired:
-            p.terminate()
-            record["exit"] = 124
-            save()
-            raise RuntimeError("PART A time budget exhausted")
-    save()
-    if record["exit"] not in allowed:
-        with (ROOT / record["log"]).open("rb") as f:
-            f.seek(max(0, f.seek(0, 2) - 16000))
-            print(f.read().decode(errors="replace"), flush=True)
-        raise RuntimeError(f"command {label} failed: {record['exit']}")
-    return (ROOT / record["log"]).read_text(errors="replace")
+    return OBSERVER.run(args, cwd, env, allowed)
 
 
 def require(ok, message):
@@ -204,7 +188,7 @@ def main():
     ndk.parent.mkdir(parents=True, exist_ok=True)
     (ROOT / "tools/ndk-unpack/android-ndk-r26c").rename(ndk)
     require("Pkg.Revision = 26.2.11394342" in (ndk / "source.properties").read_text(), "NDK package revision mismatch")
-    for package in ["clang", "libclang"]:
+    for package in ["clang"]:
         url = f"https://commondatastorage.googleapis.com/chromium-browser-clang/Linux_x64/{package}-{REV}.tar.xz"
         unpack(download(url, package + ".tar.xz"), ROOT / "tools/clang")
     rusturl = "https://storage.googleapis.com/chromium-browser-clang/Linux_x64/rust-toolchain-4c4205163abcbd08948b3efab796c543ba1ea687-4-llvmorg-23-init-10931-g20b6ec66.tar.xz"
@@ -222,11 +206,13 @@ def main():
         run(["git", "checkout", "--detach", "FETCH_HEAD"], d)
         require(run(["git", "rev-parse", "HEAD"], d).strip() == commit, "extra source mismatch")
     M["stage"] = "A3"
-    for patch, repo in [("0001-final-android-bindgen-and-prepared-ndk.patch", S), ("0002-android-ndk-version-input.patch", S / "build")]:
+    for patch, repo in [("0001-final-android-bindgen-and-prepared-ndk.patch", S), ("0002-android-ndk-version-input.patch", S / "build"), ("0003-stage-observation.patch", S), ("0004-final-bindgen-resource-directory.patch", S)]:
         p = KIT / "patches" / patch
+        changed_paths = [line[6:] for line in p.read_text().splitlines() if line.startswith("+++ b/")]
+        before_files = {name: sha(repo / name) for name in changed_paths}
         run(["git", "apply", "--unidiff-zero", "--check", p], repo)
         run(["git", "apply", "--unidiff-zero", p], repo)
-        M["patches"].append({"file": patch, "sha256": sha(p), "repo": str(repo)})
+        M["patches"].append({"file": patch, "sha256": sha(p), "repo": str(repo), "before": before_files, "after": {name: sha(repo / name) for name in changed_paths}})
         (E / patch).write_bytes(p.read_bytes())
         run(["git", "diff", "--check"], repo)
         run(["git", "diff"], repo)
@@ -234,7 +220,7 @@ def main():
     tc = ndk / "toolchains/llvm/prebuilt/linux-x86_64"
     require((tc / "sysroot/usr/include/stdio.h").is_file(), "NDK sysroot layout unresolved")
     # The complete selected NDK supplies consumer compiler, runtime and sysroot.
-    # V8 and final bindgen still use the separately pinned Chromium Clang/libclang.
+    # V8 and final bindgen still use the pinned Chromium compiler and verified Ubuntu host libclang.
     for name, directory in [('ndk', ndk), ('clang', ROOT / 'tools/clang')]:
         (E / (name + '-inventory.txt')).write_text('\n'.join(
             str(p.relative_to(directory)) + (' -> ' + os.readlink(p) if p.is_symlink() else '')
@@ -258,7 +244,7 @@ def main():
         if key.startswith(("CARGO_FEATURE_", "BINDGEN_EXTRA_CLANG_ARGS", "RUSTY_V8_")) or key in ["DOCS_RS", "DENO_TRYBUILD", "DISABLE_CLANG", "GN_ARGS", "EXTRA_GN_ARGS", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "V8_FROM_SOURCE", "CC", "CXX", "AR", "CFLAGS", "CXXFLAGS"]:
             env.pop(key)
     env.update(GN=str(ROOT / "tools/gn/gn"), NINJA=str(ROOT / "tools/ninja/ninja"), PYTHON=sys.executable,
-               LIBCLANG_PATH=str(ROOT / "tools/clang/lib"), CLANG_BASE_PATH=str(ROOT / "tools/clang"),
+               CLANG_BASE_PATH=str(ROOT / "tools/clang"),
                RR_ANDROID_SYSROOT=str(tc / "sysroot"), RR_ANDROID_API="29", GN_ARGS="android_ndk_api_level=29",
                CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=str(wrappers / "cc"),
                CC_aarch64_linux_android=str(wrappers / "cc"),
@@ -285,11 +271,23 @@ def main():
     if (ndk / "source.properties").is_file():
         shutil.copy2(ndk / "source.properties", E / "ndk-source.properties")
     M["tool_hashes"] = {str(p.relative_to(ROOT)): sha(p) for p in [Path(env["GN"]), Path(env["NINJA"]), ROOT / "tools/clang/bin/clang", Path(env["CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER"])]}
+    OBSERVER.stage("Toolchain prepared")
+    env, M["libclang_preflight"] = libclang_preflight(ROOT, E, S, env, run, download, sha)
+    M["build_environment"].update({k: env[k] for k in ["LIBCLANG_PATH", "LD_LIBRARY_PATH", "RR_LIBCLANG_RESOURCE"]})
+    M["loader_scope"] = "Explicit file and companion directory, scoped to Cargo process trees; direct and exact bindgen smoke use same environment. No global shell exports."
+    OBSERVER.stage("libclang preflight PASS")
+    if MODE == "preflight":
+        M["stage"] = "PREFLIGHT_PASS"
+        M["result"] = "PREFLIGHT_PASS"
+        save()
+        return
     M["prepared_source_sha256"] = tracked(S)
     M["consumer_source_sha256"] = tracked(C)
-    jobs = max(1, min(os.cpu_count(), int(re.search(r"MemTotal:\s+(\d+)", Path("/proc/meminfo").read_text())[1]) // 2500000))
+    require(os.cpu_count() >= 4, "Expected four-vCPU runner")
+    jobs = 4
     M["jobs"] = jobs
     M["stage"] = "A4"
+    OBSERVER.stage("native build start")
     run(["rustup", "run", "1.91.0", "cargo", "build", "--locked", "--release", "--target", "aarch64-linux-android", "--features", "v8_enable_sandbox", "-j", str(jobs), "-vv"], S, env)
     require(tracked(S) == M["prepared_source_sha256"], "producer tracked source changed during compile")
     g = ROOT / "producer-target/aarch64-linux-android/release/gn_out"
@@ -299,6 +297,8 @@ def main():
     expected = {"target_os": '"android"', "target_cpu": '"arm64"', "v8_target_cpu": '"arm64"', "v8_enable_sandbox": "true", "v8_enable_pointer_compression": "true", "v8_enable_external_code_space": "true", "use_custom_libcxx": "true", "is_component_build": "false", "is_debug": "false"}
     require(all(options.get(k) == v for k, v in expected.items()), "GN security/target gate mismatch")
     M["features"] = expected
+    OBSERVER.stage("artifact/hash staging")
+    capture(ROOT, ROOT / "salvage-live", include_logs=False)
     for name in ["args.gn", "project.json"]:
         shutil.copy2(g / name, E / name)
     archive = g / "obj/librusty_v8.a"
@@ -317,7 +317,12 @@ def main():
     shutil.copy2(binding, b)
     M["outputs"] = {p.name: sha(p) for p in [archive, gz, b]}
     (A / "rusty_v8_ptrcomp_sandbox_release_aarch64-linux-android.sha256").write_text(f"{sha(gz)}  {gz.name}\n{sha(b)}  {b.name}\n")
+    M["source_postbuild"] = {"producer": tracked(S), "consumer": tracked(C), "producer_lock": sha(S / "Cargo.lock"), "consumer_lock": sha(lock)}
+    require(M["source_postbuild"]["producer"] == M["prepared_source_sha256"] and M["source_postbuild"]["producer_lock"] == M["sources"]["producer_lock"], "producer postbuild identity mismatch")
     M["stage"] = "A5"
+    OBSERVER.consumer = True
+    OBSERVER.stage("consumer-link start")
+    (E / "consumer-result.json").write_text(json.dumps({"result": "STARTED", "pair": M["outputs"]}) + "\n")
     env.pop("V8_FROM_SOURCE")
     env.update(RUSTY_V8_ARCHIVE=str(gz), RUSTY_V8_SRC_BINDING_PATH=str(b), CARGO_TARGET_DIR=str(ROOT / "consumer-target"))
     M["consumer_pair"] = {"archive": str(gz), "archive_sha256": sha(gz), "binding": str(b), "binding_sha256": sha(b)}
@@ -330,6 +335,10 @@ def main():
     run([str(ROOT / "tools/clang/bin/llvm-nm"), "--undefined-only", host])
     shutil.copy2(host, A / host.name)
     M["outputs"][host.name] = sha(host)
+    M["source_postconsumer"] = {"producer": tracked(S), "consumer": tracked(C), "producer_lock": sha(S / "Cargo.lock"), "consumer_lock": sha(lock)}
+    require(M["source_postconsumer"]["producer"] == M["prepared_source_sha256"], "producer identity changed during consumer")
+    (E / "consumer-result.json").write_text(json.dumps({"result": "PASS", "host_sha256": sha(host)}) + "\n")
+    OBSERVER.stage("consumer result", result="PASS", host_sha256=sha(host))
     M["stage"] = "A6_REVIEW_REQUIRED"
     M["result"] = "EVIDENCE_READY_FOR_REVIEW"
     M["note"] = "Build/link gates passed; Development must review native closure, inputs and all evidence before assigning PRODUCER_FEASIBLE. No PART B automation."
@@ -343,9 +352,13 @@ if __name__ == "__main__":
     except Exception as exc:
         M["result"] = "RUN_BLOCKED_REVIEW_REQUIRED"
         M["failure"] = {"message": str(exc), "stage": M["stage"]}
+        if OBSERVER.consumer:
+            (E / "consumer-result.json").write_text(json.dumps({"result": "FAIL", "error": str(exc)}) + "\n")
+            OBSERVER.stage("consumer result", result="FAIL", error=str(exc))
         print(str(exc), file=sys.stderr, flush=True)
         sys.exit(1)
     finally:
         M["elapsed_seconds"] = round(time.time() - START, 1)
         M["ended_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         save()
+        capture(ROOT, ROOT / "salvage-live", include_logs=True)

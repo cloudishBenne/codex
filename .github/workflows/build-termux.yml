@@ -7,8 +7,19 @@ on:
         description: Unique Termux dispatch correlation
         required: true
         type: string
+      mode:
+        description: Cheap preflight or gated producer
+        required: true
+        type: choice
+        options: [preflight, producer]
+        default: preflight
+      preflight_run:
+        description: Successful same-SHA preflight run ID for producer mode
+        required: false
+        default: ''
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: termux-v8-feasibility-${{ github.ref }}
   cancel-in-progress: false
@@ -22,7 +33,25 @@ jobs:
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
+      - name: Verify preflight prerequisite
+        if: inputs.mode == 'producer'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREFLIGHT_RUN: ${{ inputs.preflight_run }}
+        run: |
+          set -euo pipefail
+          [[ "$PREFLIGHT_RUN" =~ ^[0-9]+$ ]]
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$PREFLIGHT_RUN" > "$RUNNER_TEMP/prior-preflight.json"
+          python3 - <<'PY'
+          import json,os
+          x=json.load(open(os.environ['RUNNER_TEMP']+'/prior-preflight.json'))
+          assert x['status']=='completed' and x['conclusion']=='success'
+          assert x['head_sha']==os.environ['GITHUB_SHA'] and x['workflow_id']==348943235
+          assert x['event']=='workflow_dispatch'
+          PY
       - name: Isolated producer and unchanged consumer
+        env:
+          RR_MODE: ${{ inputs.mode }}
         shell: bash
         run: |
           set -euo pipefail
@@ -34,6 +63,20 @@ jobs:
           export CARGO_HOME="$RR_ROOT/cargo-home"
           export RUSTUP_HOME="$RR_ROOT/rustup-home"
           python3 scripts/termux-feasibility/ci/producer-feasibility.py
+      - name: Independent partial-output salvage
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/termux-feasibility/ci/salvage.py "$RUNNER_TEMP/v8-feasibility-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" "$RUNNER_TEMP/feasibility-salvage"
+      - name: Upload independent salvage
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: v8-feasibility-salvage-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/feasibility-salvage/
+          if-no-files-found: warn
+          retention-days: 14
       - name: Preserve raw evidence even after failure
         if: always()
         shell: bash
