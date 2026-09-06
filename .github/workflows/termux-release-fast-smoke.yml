@@ -1,0 +1,117 @@
+name: Termux Release Fast Runner Smoke
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: termux-release-fast-smoke
+  cancel-in-progress: false
+
+jobs:
+  smoke:
+    if: github.actor == 'cloudishBenne'
+    runs-on: termux-release-fast
+    timeout-minutes: 10
+
+    steps:
+      - name: Verify isolated runner identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'actor=%s\n' "$GITHUB_ACTOR"
+          printf 'runner_os=%s\n' "$RUNNER_OS"
+          printf 'runner_arch=%s\n' "$RUNNER_ARCH"
+          printf 'runner_temp=%s\n' "$RUNNER_TEMP"
+          test "$GITHUB_ACTOR" = "cloudishBenne"
+          test "$RUNNER_OS" = "Linux"
+          test "$RUNNER_ARCH" = "X64"
+          test -z "${SSH_AUTH_SOCK:-}"
+
+      - name: Verify Lima plain-mode filesystem isolation
+        shell: bash
+        run: |
+          set -euo pipefail
+          if findmnt -rn -o TARGET,SOURCE,FSTYPE | grep -Ei '9p|virtiofs|sshfs|fuse.*lima'; then
+            echo "Unexpected host-share-like filesystem"
+            exit 1
+          fi
+          test ! -e /var/run/docker.sock
+          test -S "/run/user/$(id -u)/docker.sock"
+
+      - name: Verify rootless Docker security state
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker context use rootless >/dev/null
+          docker info >"$RUNNER_TEMP/docker-info.txt"
+          grep -q 'rootless' "$RUNNER_TEMP/docker-info.txt"
+
+          if ps -eo uid=,comm= | awk '
+            $1==0 && ($2=="dockerd" || $2=="containerd") {found=1}
+            END {exit found ? 0 : 1}
+          '; then
+            echo "Unexpected root-owned Docker/containerd process"
+            exit 1
+          fi
+
+          if ss -ltnp 2>/dev/null | grep -Ei 'docker|rootless'; then
+            echo "Unexpected Docker/rootless TCP listener"
+            exit 1
+          fi
+
+          docker info --format \
+            'ServerVersion={{.ServerVersion}} Driver={{.Driver}} SecurityOptions={{json .SecurityOptions}}'
+
+      - name: Offline rootless container smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          image="termux-jit-smoke:${GITHUB_RUN_ID}"
+          name="termux-jit-smoke-${GITHUB_RUN_ID}"
+          tmp="$(mktemp -d)"
+
+          cleanup() {
+            docker rm -f "$name" >/dev/null 2>&1 || true
+            docker image rm -f "$image" >/dev/null 2>&1 || true
+            rm -rf "$tmp"
+          }
+          trap cleanup EXIT
+
+          mkdir -p "$tmp/rootfs/bin"
+          cp /bin/busybox "$tmp/rootfs/bin/busybox"
+          ln -s busybox "$tmp/rootfs/bin/sh"
+
+          tar -C "$tmp/rootfs" -cf - . | docker import - "$image" >/dev/null
+
+          cid="$(docker run -d \
+            --name "$name" \
+            --network none \
+            "$image" \
+            /bin/busybox sleep 30)"
+
+          pid="$(docker inspect -f '{{.State.Pid}}' "$cid")"
+          outer_uid="$(ps -o uid= -p "$pid" | tr -d ' ')"
+
+          printf 'container_id=%s\n' "$cid"
+          printf 'outer_pid=%s\n' "$pid"
+          printf 'outer_uid=%s\n' "$outer_uid"
+          docker exec "$cid" /bin/busybox id
+          docker exec "$cid" /bin/busybox uname -m
+
+          test "$outer_uid" = "$(id -u)"
+
+          docker stop "$cid" >/dev/null
+          docker wait "$cid" >/dev/null
+          docker rm "$cid" >/dev/null
+          docker image rm "$image" >/dev/null
+          rm -rf "$tmp"
+          trap - EXIT
+
+      - name: Final smoke marker
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "TERMUX_RELEASE_FAST_JIT_SMOKE=PASS"
