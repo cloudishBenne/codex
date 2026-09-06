@@ -8,6 +8,7 @@ from pathlib import Path
 import platform
 import re
 import shutil
+import shlex
 import stat
 import subprocess
 import sys
@@ -29,9 +30,11 @@ A = ROOT / "artifacts"
 S = ROOT / "rusty-v8-src"
 C = ROOT / "codex-src"
 START = time.time()
+DEADLINE = 1788683448  # 2026-09-06 08:30:48 UTC; first run start + 180 minutes
 M = {"schema_version": 1, "result": "NOT_EVALUATED", "stage": "A0",
      "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-     "budget_minutes": 170, "max_correction_runs": 2, "part_b_entered": False,
+     "budget_minutes": 170, "max_correction_runs": 2, "correction_run": 1,
+     "prior_run": 34014164094, "deadline_utc": "2026-09-06T08:30:48Z", "part_b_entered": False,
      "commands": [], "downloads": [], "patches": [], "outputs": {},
      "workflow": {k: os.getenv(k) for k in ["GITHUB_SHA", "GITHUB_REF", "GITHUB_WORKFLOW_REF",
          "GITHUB_WORKFLOW_SHA", "GITHUB_RUN_ID", "GITHUB_RUN_ATTEMPT", "ImageOS", "ImageVersion"]}}
@@ -53,7 +56,8 @@ def run(args, cwd=None, env=None, allowed=(0,)):
     M["commands"].append(record)
     save()
     print(json.dumps(record), flush=True)
-    remaining = max(1, 170 * 60 - (time.time() - START))
+    remaining = min(170 * 60 - (time.time() - START), DEADLINE - time.time())
+    require(remaining > 0, "PART A wall-clock budget exhausted")
     with (ROOT / record["log"]).open("wb") as f:
         p = subprocess.Popen(record["argv"], cwd=cwd or ROOT, env=env, stdout=f, stderr=subprocess.STDOUT)
         try:
@@ -82,7 +86,7 @@ def download(url, name, expected=None):
     with urllib.request.urlopen(url, timeout=120) as r, p.open("wb") as f:
         shutil.copyfileobj(r, f)
     digest = sha(p)
-    M["downloads"].append({"source": url if "googleapis.com" in url else name,
+    M["downloads"].append({"source": urllib.parse.urlunsplit(urllib.parse.urlsplit(url)._replace(query="", fragment="")),
                            "file": name, "sha256": digest, "bytes": p.stat().st_size})
     save()
     require(expected is None or digest == expected, f"download checksum mismatch: {name}")
@@ -214,7 +218,26 @@ def main():
     (S / "third_party/android_ndk").symlink_to("android_toolchain/ndk", target_is_directory=True)
     tc = ndk / "toolchains/llvm/prebuilt/linux-x86_64"
     require((tc / "sysroot/usr/include/stdio.h").is_file(), "NDK sysroot layout unresolved")
-    require((tc / "bin/aarch64-linux-android29-clang").is_file(), "NDK consumer compiler layout unresolved")
+    # Chromium's DEPS NDK supplies the sysroot; use the pinned Chromium compiler
+    # explicitly instead of assuming Google's full-NDK launcher scripts exist.
+    for name, directory in [('ndk', ndk), ('clang', ROOT / 'tools/clang')]:
+        (E / (name + '-inventory.txt')).write_text('\n'.join(
+            str(p.relative_to(directory)) + (' -> ' + os.readlink(p) if p.is_symlink() else '')
+            for p in sorted(directory.rglob('*')) if p.is_file() or p.is_symlink()) + '\n')
+    wrappers = ROOT / 'tools/android-wrappers'
+    wrappers.mkdir()
+    for name, executable in [('cc', 'clang'), ('cxx', 'clang++')]:
+        compiler = ROOT / 'tools/clang/bin' / executable
+        require(compiler.is_file(), f'pinned Chromium compiler missing: {compiler}')
+        wrapper = wrappers / name
+        command = [str(compiler), '--target=aarch64-linux-android29', '--sysroot=' + str(tc / 'sysroot')]
+        wrapper.write_text('#!/bin/sh\nexec ' + shlex.join(command) + ' "$@"\n')
+        wrapper.chmod(0o755)
+        shutil.copy2(wrapper, E / ('android-' + name + '.sh'))
+    require((ROOT / 'tools/clang/bin/ld.lld').is_file(), 'pinned LLVM linker missing')
+    M['android_toolchain'] = {'mode': 'Chromium Clang + exact DEPS NDK sysroot', 'api': 29,
+        'ndk_instance': 'fOG8lXNWjsikNxRc02AqHOqoh9QRlPhgDjVTQemkZicC', 'clang_revision': REV,
+        'wrappers': {p.name: sha(p) for p in wrappers.iterdir()}}
     env = dict(os.environ)
     for key in list(env):
         if key.startswith(("CARGO_FEATURE_", "BINDGEN_EXTRA_CLANG_ARGS", "RUSTY_V8_")) or key in ["DOCS_RS", "DENO_TRYBUILD", "DISABLE_CLANG", "GN_ARGS", "EXTRA_GN_ARGS", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "V8_FROM_SOURCE", "CC", "CXX", "AR", "CFLAGS", "CXXFLAGS"]:
@@ -222,13 +245,21 @@ def main():
     env.update(GN=str(ROOT / "tools/gn/gn"), NINJA=str(ROOT / "tools/ninja/ninja"), PYTHON=sys.executable,
                LIBCLANG_PATH=str(ROOT / "tools/clang/lib"), CLANG_BASE_PATH=str(ROOT / "tools/clang"),
                RR_ANDROID_SYSROOT=str(tc / "sysroot"), RR_ANDROID_API="29", GN_ARGS="android_ndk_api_level=29",
-               CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=str(tc / "bin/aarch64-linux-android29-clang"),
-               CC_aarch64_linux_android=str(tc / "bin/aarch64-linux-android29-clang"),
-               CXX_aarch64_linux_android=str(tc / "bin/aarch64-linux-android29-clang++"), AR_aarch64_linux_android=str(tc / "bin/llvm-ar"),
+               CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=str(wrappers / "cc"),
+               CC_aarch64_linux_android=str(wrappers / "cc"),
+               CXX_aarch64_linux_android=str(wrappers / "cxx"), AR_aarch64_linux_android=str(ROOT / "tools/clang/bin/llvm-ar"),
                CARGO_TARGET_DIR=str(ROOT / "producer-target"), V8_FROM_SOURCE="1", PRINT_GN_ARGS="1")
     M["build_environment"] = {k: env[k] for k in env if k in ["GN", "NINJA", "PYTHON", "LIBCLANG_PATH", "CLANG_BASE_PATH", "GN_ARGS", "RR_ANDROID_SYSROOT", "RR_ANDROID_API"] or k.startswith(("CARGO_TARGET_", "CC_aarch64", "CXX_aarch64", "AR_aarch64"))}
     for tool in [env["GN"], env["NINJA"], str(ROOT / "tools/clang/bin/clang"), env["CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER"], sys.executable]:
         run([tool, "--version"], env=env)
+    builtins = run([str(wrappers / 'cc'), '-print-libgcc-file-name'], env=env).strip()
+    require(Path(builtins).is_file() and Path(builtins).resolve().is_relative_to(ROOT), 'Android compiler-rt builtins not resolved inside pinned toolchain')
+    M['android_toolchain']['builtins'] = {'path': builtins, 'sha256': sha(builtins)}
+    smoke = ROOT / 'android-link-smoke.c'
+    smoke.write_text('int main(void) { return 0; }\n')
+    run([str(wrappers / 'cc'), '-v', smoke, '-o', ROOT / 'android-link-smoke'], env=env)
+    smoke_elf = run([str(ROOT / 'tools/clang/bin/llvm-readelf'), '-h', '-l', '-d', ROOT / 'android-link-smoke'])
+    require('AArch64' in smoke_elf and '/system/bin/linker64' in smoke_elf and 'libc.so.6' not in smoke_elf, 'Android link smoke target mismatch')
     run([str(S / "third_party/rust-toolchain/bin/rustc"), "-Vv"])
     if (ndk / "source.properties").is_file():
         shutil.copy2(ndk / "source.properties", E / "ndk-source.properties")
