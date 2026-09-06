@@ -33,8 +33,8 @@ START = time.time()
 DEADLINE = 1788683448  # 2026-09-06 08:30:48 UTC; first run start + 180 minutes
 M = {"schema_version": 1, "result": "NOT_EVALUATED", "stage": "A0",
      "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-     "budget_minutes": 170, "max_correction_runs": 2, "correction_run": 1,
-     "prior_run": 34014164094, "deadline_utc": "2026-09-06T08:30:48Z", "part_b_entered": False,
+     "budget_minutes": 170, "max_correction_runs": 2, "correction_run": 2,
+     "prior_run": 34014758687, "deadline_utc": "2026-09-06T08:30:48Z", "part_b_entered": False,
      "commands": [], "downloads": [], "patches": [], "outputs": {},
      "workflow": {k: os.getenv(k) for k in ["GITHUB_SHA", "GITHUB_REF", "GITHUB_WORKFLOW_REF",
          "GITHUB_WORKFLOW_SHA", "GITHUB_RUN_ID", "GITHUB_RUN_ATTEMPT", "ImageOS", "ImageVersion"]}}
@@ -187,8 +187,23 @@ def main():
     cipd("gn/gn/linux-amd64", "git_revision:3357c4f51b1a9e676378c695dd9c7e9911c35ee6", "gn", ROOT / "tools/gn")
     cipd("infra/3pp/tools/ninja/linux-amd64", "version:3@1.12.1.chromium.4", "ninja", ROOT / "tools/ninja")
     ndk = S / "third_party/android_toolchain/ndk"
-    cipd("chromium/third_party/android_toolchain/android_toolchain", "version:2@30.0.14608247", "ndk", ndk,
-         "fOG8lXNWjsikNxRc02AqHOqoh9QRlPhgDjVTQemkZicC")
+    # A3 explicitly permits the known r26c integration after the exact DEPS trial.
+    # Run 34014758687 proved the stripped DEPS package lacks Android libunwind.a.
+    ndk_zip = download("https://dl.google.com/android/repository/android-ndk-r26c-linux.zip", "android-ndk-r26c-linux.zip")
+    with ndk_zip.open("rb") as f:
+        ndk_sha1 = hashlib.file_digest(f, "sha1").hexdigest()
+    require(ndk_zip.stat().st_size == 668556021 and ndk_sha1 == "7faebe2ebd3590518f326c82992603170f07c96e", "official r26c package identity mismatch")
+    M["downloads"][-1].update(version="26.2.11394342", sha1=ndk_sha1,
+        checksum_source="https://github.com/android/ndk/wiki/Home/90bb494b13366920b0e05807a6933af5a59926dc")
+    M["ndk_selection"] = {"previous": "2@30.0.14608247", "selected": "26.2.11394342",
+        "reason": "Missing complete consumer compiler/runtime in DEPS NDK; A3 r26c integration",
+        "scope": "single NDK sysroot for V8, bindgen and consumer; NDK consumer tools; unchanged Chromium V8 compiler"}
+    save()
+    unpack(ndk_zip, ROOT / "tools/ndk-unpack")
+    require(not ndk.exists(), "NDK destination already exists")
+    ndk.parent.mkdir(parents=True, exist_ok=True)
+    (ROOT / "tools/ndk-unpack/android-ndk-r26c").rename(ndk)
+    require("Pkg.Revision = 26.2.11394342" in (ndk / "source.properties").read_text(), "NDK package revision mismatch")
     for package in ["clang", "libclang"]:
         url = f"https://commondatastorage.googleapis.com/chromium-browser-clang/Linux_x64/{package}-{REV}.tar.xz"
         unpack(download(url, package + ".tar.xz"), ROOT / "tools/clang")
@@ -218,8 +233,8 @@ def main():
     (S / "third_party/android_ndk").symlink_to("android_toolchain/ndk", target_is_directory=True)
     tc = ndk / "toolchains/llvm/prebuilt/linux-x86_64"
     require((tc / "sysroot/usr/include/stdio.h").is_file(), "NDK sysroot layout unresolved")
-    # Chromium's DEPS NDK supplies the sysroot; use the pinned Chromium compiler
-    # explicitly instead of assuming Google's full-NDK launcher scripts exist.
+    # The complete selected NDK supplies consumer compiler, runtime and sysroot.
+    # V8 and final bindgen still use the separately pinned Chromium Clang/libclang.
     for name, directory in [('ndk', ndk), ('clang', ROOT / 'tools/clang')]:
         (E / (name + '-inventory.txt')).write_text('\n'.join(
             str(p.relative_to(directory)) + (' -> ' + os.readlink(p) if p.is_symlink() else '')
@@ -227,16 +242,16 @@ def main():
     wrappers = ROOT / 'tools/android-wrappers'
     wrappers.mkdir()
     for name, executable in [('cc', 'clang'), ('cxx', 'clang++')]:
-        compiler = ROOT / 'tools/clang/bin' / executable
-        require(compiler.is_file(), f'pinned Chromium compiler missing: {compiler}')
+        compiler = tc / 'bin' / executable
+        require(compiler.is_file(), f'selected NDK compiler missing: {compiler}')
         wrapper = wrappers / name
         command = [str(compiler), '--target=aarch64-linux-android29', '--sysroot=' + str(tc / 'sysroot')]
         wrapper.write_text('#!/bin/sh\nexec ' + shlex.join(command) + ' "$@"\n')
         wrapper.chmod(0o755)
         shutil.copy2(wrapper, E / ('android-' + name + '.sh'))
-    require((ROOT / 'tools/clang/bin/ld.lld').is_file(), 'pinned LLVM linker missing')
-    M['android_toolchain'] = {'mode': 'Chromium Clang + exact DEPS NDK sysroot', 'api': 29,
-        'ndk_instance': 'fOG8lXNWjsikNxRc02AqHOqoh9QRlPhgDjVTQemkZicC', 'clang_revision': REV,
+    require((tc / 'bin/ld.lld').is_file(), 'selected NDK linker missing')
+    M['android_toolchain'] = {'mode': 'Chromium V8 compiler + complete NDK r26c consumer/sysroot', 'api': 29,
+        'ndk_revision': '26.2.11394342', 'v8_clang_revision': REV,
         'wrappers': {p.name: sha(p) for p in wrappers.iterdir()}}
     env = dict(os.environ)
     for key in list(env):
@@ -247,7 +262,7 @@ def main():
                RR_ANDROID_SYSROOT=str(tc / "sysroot"), RR_ANDROID_API="29", GN_ARGS="android_ndk_api_level=29",
                CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=str(wrappers / "cc"),
                CC_aarch64_linux_android=str(wrappers / "cc"),
-               CXX_aarch64_linux_android=str(wrappers / "cxx"), AR_aarch64_linux_android=str(ROOT / "tools/clang/bin/llvm-ar"),
+               CXX_aarch64_linux_android=str(wrappers / "cxx"), AR_aarch64_linux_android=str(tc / "bin/llvm-ar"),
                CARGO_TARGET_DIR=str(ROOT / "producer-target"), V8_FROM_SOURCE="1", PRINT_GN_ARGS="1")
     M["build_environment"] = {k: env[k] for k in env if k in ["GN", "NINJA", "PYTHON", "LIBCLANG_PATH", "CLANG_BASE_PATH", "GN_ARGS", "RR_ANDROID_SYSROOT", "RR_ANDROID_API"] or k.startswith(("CARGO_TARGET_", "CC_aarch64", "CXX_aarch64", "AR_aarch64"))}
     for tool in [env["GN"], env["NINJA"], str(ROOT / "tools/clang/bin/clang"), env["CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER"], sys.executable]:
@@ -255,6 +270,12 @@ def main():
     builtins = run([str(wrappers / 'cc'), '-print-libgcc-file-name'], env=env).strip()
     require(Path(builtins).is_file() and Path(builtins).resolve().is_relative_to(ROOT), 'Android compiler-rt builtins not resolved inside pinned toolchain')
     M['android_toolchain']['builtins'] = {'path': builtins, 'sha256': sha(builtins)}
+    unwinds = sorted(tc.rglob('libunwind.a'))
+    require(unwinds, 'selected NDK contains no libunwind archives')
+    M['android_toolchain']['unwind_candidates'] = {str(p.relative_to(tc)): sha(p) for p in unwinds}
+    M['android_toolchain']['consumer_tool_hashes'] = {str(p.relative_to(tc)): sha(p) for p in
+        [tc / 'bin/clang', tc / 'bin/clang++', tc / 'bin/ld.lld', tc / 'bin/llvm-ar']}
+    run([str(wrappers / 'cc'), '-print-search-dirs'], env=env)
     smoke = ROOT / 'android-link-smoke.c'
     smoke.write_text('int main(void) { return 0; }\n')
     run([str(wrappers / 'cc'), '-v', smoke, '-o', ROOT / 'android-link-smoke'], env=env)

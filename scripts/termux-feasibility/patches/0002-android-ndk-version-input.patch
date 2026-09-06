@@ -1,4 +1,4 @@
 --- a/config/gclient_args.gni
 +++ b/config/gclient_args.gni
 @@ -0,0 +1 @@
-+android_ndk_version = "2@30.0.14608247"
++android_ndk_version = "26.2.11394342"
