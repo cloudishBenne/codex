@@ -1,0 +1,54 @@
+{
+  "source_commit": "f8738419e5037768b70e9f257b94d843a8e8dea2",
+  "source_ref": "termux/v8-producer-feasibility-v150.4.0",
+  "run_id": 34022532408,
+  "archive_sha256": "970ce40114632a7c02de0aa1e2fbf5a3150d2605d65e543c62cbbff65347129a",
+  "files": [
+    {
+      "path": "scripts/termux-feasibility/ci/build-termux.yml",
+      "git_blob": "7bf9abe09837716a50985f03e875260bf2d6b38d",
+      "sha256": "930f81bda1434ba088ca334f2f3e56d6c9892c93869c385ea98cdda112e327fd"
+    },
+    {
+      "path": "scripts/termux-feasibility/ci/observe.py",
+      "git_blob": "4825e16ea5a42074ec7cf256e481c1e3a3f0e252",
+      "sha256": "a77ccd67957809532dfa37e78b12a4df90a44e82f03609afd5986e645f161077"
+    },
+    {
+      "path": "scripts/termux-feasibility/ci/preflight.py",
+      "git_blob": "cdd5ae3e5c5d4e86f4597a46eacd4a2ace3e0c18",
+      "sha256": "0844060565521c51a819e9826cd97b26d259b6f3409ce65f6879bbd35694b027"
+    },
+    {
+      "path": "scripts/termux-feasibility/ci/producer-feasibility.py",
+      "git_blob": "b3b29f9f34b5827d9f7f1df8b66dc6066795526c",
+      "sha256": "b3c93aa9e655c3eac7a6de8bfa9be1b90db71e40bdf539dd98a44850f00d4577"
+    },
+    {
+      "path": "scripts/termux-feasibility/ci/salvage.py",
+      "git_blob": "7adb769794125b82c5293265083ee4dff64ce02b",
+      "sha256": "db4f58480e9072ce360221fdbe8e7cc88fc07dba37cf54fabfdfe45051fd13f1"
+    },
+    {
+      "path": "scripts/termux-feasibility/patches/0001-final-android-bindgen-and-prepared-ndk.patch",
+      "git_blob": "c6c10abffd7b81352a872dff1b074a99fc13bde3",
+      "sha256": "9ae26b62faa2be3b20459fa82c75847e0cf0fdfd7a13e278a01ede30cf2ef76b"
+    },
+    {
+      "path": "scripts/termux-feasibility/patches/0002-android-ndk-version-input.patch",
+      "git_blob": "d0ebb872813053fb8891f2bebce9177ce6cff2dc",
+      "sha256": "87aa8a8939caedfc5f2ea437d39d23c5d078cb51506c0be29ae5c87653569242"
+    },
+    {
+      "path": "scripts/termux-feasibility/patches/0003-stage-observation.patch",
+      "git_blob": "2adeabea5f702ecdae12f676cf91a3dbe58d6013",
+      "sha256": "1e1b5cbf5edc3cc97123806ebf376ed250514566c906d36f45b5baebb249096a"
+    },
+    {
+      "path": "scripts/termux-feasibility/patches/0004-final-bindgen-resource-directory.patch",
+      "git_blob": "aa6289f9e06940c57b2fcbb4fca2628ed0895624",
+      "sha256": "dd08dff6c37d66b761671ec11df5229dad5af56750ae4029995488c4d160f8b8"
+    }
+  ],
+  "note": "Byte-identical historical successful V8 producer recipe; retained for provenance. Release consumer uses preserved pair; this recipe is not executed and V8 is not rebuilt. Historical consumer lock failure and old run-budget fields remain historical."
+}

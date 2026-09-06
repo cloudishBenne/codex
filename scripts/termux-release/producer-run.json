@@ -1,0 +1,1490 @@
+{
+  "schema_version": 1,
+  "result": "RUN_BLOCKED_REVIEW_REQUIRED",
+  "stage": "A5",
+  "started_utc": "2026-09-06T08:41:07Z",
+  "budget_minutes": 170,
+  "max_correction_runs": 1,
+  "correction_run": 0,
+  "continuation": "control-v0.2",
+  "mode": "producer",
+  "prior_run": 34015167037,
+  "run_budget_seconds": 10200,
+  "part_b_entered": false,
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A0",
+      "log": "logs/000.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:07Z",
+      "ended_utc": "2026-09-06T08:41:07Z"
+    },
+    {
+      "argv": [
+        "rustup",
+        "--version"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A0",
+      "log": "logs/001.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:07Z",
+      "ended_utc": "2026-09-06T08:41:07Z"
+    },
+    {
+      "argv": [
+        "cmake",
+        "--version"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A0",
+      "log": "logs/002.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:07Z",
+      "ended_utc": "2026-09-06T08:41:08Z"
+    },
+    {
+      "argv": [
+        "make",
+        "--version"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A0",
+      "log": "logs/003.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:08Z",
+      "ended_utc": "2026-09-06T08:41:08Z"
+    },
+    {
+      "argv": [
+        "pkg-config",
+        "--version"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A0",
+      "log": "logs/004.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:08Z",
+      "ended_utc": "2026-09-06T08:41:08Z"
+    },
+    {
+      "argv": [
+        "cc",
+        "--version"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A0",
+      "log": "logs/005.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:08Z",
+      "ended_utc": "2026-09-06T08:41:08Z"
+    },
+    {
+      "argv": [
+        "c++",
+        "--version"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A0",
+      "log": "logs/006.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:08Z",
+      "ended_utc": "2026-09-06T08:41:08Z"
+    },
+    {
+      "argv": [
+        "git",
+        "clone",
+        "--depth",
+        "1",
+        "--branch",
+        "v150.4.0",
+        "--single-branch",
+        "https://github.com/denoland/rusty_v8.git",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A1",
+      "log": "logs/007.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:08Z",
+      "ended_utc": "2026-09-06T08:41:08Z"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A1",
+      "log": "logs/008.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:08Z",
+      "ended_utc": "2026-09-06T08:41:08Z"
+    },
+    {
+      "argv": [
+        "git",
+        "submodule",
+        "update",
+        "--init",
+        "--recursive",
+        "--depth",
+        "1",
+        "--jobs",
+        "4"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A1",
+      "log": "logs/009.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:08Z",
+      "ended_utc": "2026-09-06T08:41:54Z"
+    },
+    {
+      "argv": [
+        "git",
+        "submodule",
+        "status",
+        "--recursive"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A1",
+      "log": "logs/010.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:54Z",
+      "ended_utc": "2026-09-06T08:41:54Z"
+    },
+    {
+      "argv": [
+        "git",
+        "clone",
+        "--depth",
+        "1",
+        "--branch",
+        "rust-v0.153.4",
+        "--single-branch",
+        "https://github.com/openai/codex.git",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/codex-src"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A1",
+      "log": "logs/011.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:54Z",
+      "ended_utc": "2026-09-06T08:41:58Z"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/codex-src",
+      "stage": "A1",
+      "log": "logs/012.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:58Z",
+      "ended_utc": "2026-09-06T08:41:58Z"
+    },
+    {
+      "argv": [
+        "git",
+        "submodule",
+        "update",
+        "--init",
+        "--recursive",
+        "--depth",
+        "1",
+        "--jobs",
+        "4"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/codex-src",
+      "stage": "A1",
+      "log": "logs/013.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:58Z",
+      "ended_utc": "2026-09-06T08:41:58Z"
+    },
+    {
+      "argv": [
+        "git",
+        "submodule",
+        "status",
+        "--recursive"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/codex-src",
+      "stage": "A1",
+      "log": "logs/014.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:58Z",
+      "ended_utc": "2026-09-06T08:41:58Z"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "refs/tags/rust-v0.153.4^{tag}"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/codex-src",
+      "stage": "A1",
+      "log": "logs/015.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:58Z",
+      "ended_utc": "2026-09-06T08:41:58Z"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/v8",
+      "stage": "A1",
+      "log": "logs/016.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:58Z",
+      "ended_utc": "2026-09-06T08:41:58Z"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/build",
+      "stage": "A1",
+      "log": "logs/017.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:58Z",
+      "ended_utc": "2026-09-06T08:41:58Z"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/buildtools",
+      "stage": "A1",
+      "log": "logs/018.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:58Z",
+      "ended_utc": "2026-09-06T08:41:58Z"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/tools/clang",
+      "stage": "A1",
+      "log": "logs/019.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:58Z",
+      "ended_utc": "2026-09-06T08:41:58Z"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/third_party/libc++/src",
+      "stage": "A1",
+      "log": "logs/020.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:58Z",
+      "ended_utc": "2026-09-06T08:41:58Z"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/third_party/libc++abi/src",
+      "stage": "A1",
+      "log": "logs/021.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:58Z",
+      "ended_utc": "2026-09-06T08:41:58Z"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/third_party/rust",
+      "stage": "A1",
+      "log": "logs/022.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:58Z",
+      "ended_utc": "2026-09-06T08:41:58Z"
+    },
+    {
+      "argv": [
+        "rustup",
+        "toolchain",
+        "install",
+        "1.91.0",
+        "--profile",
+        "minimal",
+        "--target",
+        "aarch64-linux-android"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A2",
+      "log": "logs/023.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:41:59Z",
+      "ended_utc": "2026-09-06T08:42:08Z"
+    },
+    {
+      "argv": [
+        "rustup",
+        "toolchain",
+        "install",
+        "1.95.0",
+        "--profile",
+        "minimal",
+        "--target",
+        "aarch64-linux-android"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A2",
+      "log": "logs/024.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:42:08Z",
+      "ended_utc": "2026-09-06T08:42:18Z"
+    },
+    {
+      "argv": [
+        "rustup",
+        "run",
+        "1.91.0",
+        "rustc",
+        "-Vv"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A2",
+      "log": "logs/025.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:42:18Z",
+      "ended_utc": "2026-09-06T08:42:18Z"
+    },
+    {
+      "argv": [
+        "rustup",
+        "run",
+        "1.91.0",
+        "cargo",
+        "-V"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A2",
+      "log": "logs/026.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:42:18Z",
+      "ended_utc": "2026-09-06T08:42:18Z"
+    },
+    {
+      "argv": [
+        "rustup",
+        "run",
+        "1.95.0",
+        "rustc",
+        "-Vv"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A2",
+      "log": "logs/027.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:42:18Z",
+      "ended_utc": "2026-09-06T08:42:18Z"
+    },
+    {
+      "argv": [
+        "rustup",
+        "run",
+        "1.95.0",
+        "cargo",
+        "-V"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A2",
+      "log": "logs/028.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:42:18Z",
+      "ended_utc": "2026-09-06T08:42:18Z"
+    },
+    {
+      "argv": [
+        "git",
+        "init"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/third_party/android_platform",
+      "stage": "A2",
+      "log": "logs/029.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:04Z",
+      "ended_utc": "2026-09-06T08:43:04Z"
+    },
+    {
+      "argv": [
+        "git",
+        "fetch",
+        "--depth",
+        "1",
+        "https://chromium.googlesource.com/chromium/src/third_party/android_platform.git",
+        "e3919359f2387399042d31401817db4a02d756ec"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/third_party/android_platform",
+      "stage": "A2",
+      "log": "logs/030.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:04Z",
+      "ended_utc": "2026-09-06T08:43:05Z"
+    },
+    {
+      "argv": [
+        "git",
+        "checkout",
+        "--detach",
+        "FETCH_HEAD"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/third_party/android_platform",
+      "stage": "A2",
+      "log": "logs/031.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:05Z",
+      "ended_utc": "2026-09-06T08:43:05Z"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/third_party/android_platform",
+      "stage": "A2",
+      "log": "logs/032.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:05Z",
+      "ended_utc": "2026-09-06T08:43:05Z"
+    },
+    {
+      "argv": [
+        "git",
+        "init"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/third_party/catapult",
+      "stage": "A2",
+      "log": "logs/033.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:05Z",
+      "ended_utc": "2026-09-06T08:43:05Z"
+    },
+    {
+      "argv": [
+        "git",
+        "fetch",
+        "--depth",
+        "1",
+        "https://chromium.googlesource.com/catapult.git",
+        "2852bb7e91e4995502ffb72b7ed21412ee157914"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/third_party/catapult",
+      "stage": "A2",
+      "log": "logs/034.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:05Z",
+      "ended_utc": "2026-09-06T08:43:10Z"
+    },
+    {
+      "argv": [
+        "git",
+        "checkout",
+        "--detach",
+        "FETCH_HEAD"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/third_party/catapult",
+      "stage": "A2",
+      "log": "logs/035.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:10Z",
+      "ended_utc": "2026-09-06T08:43:12Z"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/third_party/catapult",
+      "stage": "A2",
+      "log": "logs/036.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:12Z",
+      "ended_utc": "2026-09-06T08:43:12Z"
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--unidiff-zero",
+        "--check",
+        "/home/runner/work/codex/codex/scripts/termux-feasibility/patches/0001-final-android-bindgen-and-prepared-ndk.patch"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A3",
+      "log": "logs/037.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:12Z",
+      "ended_utc": "2026-09-06T08:43:12Z"
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--unidiff-zero",
+        "/home/runner/work/codex/codex/scripts/termux-feasibility/patches/0001-final-android-bindgen-and-prepared-ndk.patch"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A3",
+      "log": "logs/038.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:12Z",
+      "ended_utc": "2026-09-06T08:43:12Z"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A3",
+      "log": "logs/039.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:12Z",
+      "ended_utc": "2026-09-06T08:43:14Z"
+    },
+    {
+      "argv": [
+        "git",
+        "diff"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A3",
+      "log": "logs/040.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:14Z",
+      "ended_utc": "2026-09-06T08:43:14Z"
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--unidiff-zero",
+        "--check",
+        "/home/runner/work/codex/codex/scripts/termux-feasibility/patches/0002-android-ndk-version-input.patch"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/build",
+      "stage": "A3",
+      "log": "logs/041.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:14Z",
+      "ended_utc": "2026-09-06T08:43:14Z"
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--unidiff-zero",
+        "/home/runner/work/codex/codex/scripts/termux-feasibility/patches/0002-android-ndk-version-input.patch"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/build",
+      "stage": "A3",
+      "log": "logs/042.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:14Z",
+      "ended_utc": "2026-09-06T08:43:14Z"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/build",
+      "stage": "A3",
+      "log": "logs/043.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:14Z",
+      "ended_utc": "2026-09-06T08:43:14Z"
+    },
+    {
+      "argv": [
+        "git",
+        "diff"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/build",
+      "stage": "A3",
+      "log": "logs/044.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:14Z",
+      "ended_utc": "2026-09-06T08:43:14Z"
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--unidiff-zero",
+        "--check",
+        "/home/runner/work/codex/codex/scripts/termux-feasibility/patches/0003-stage-observation.patch"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A3",
+      "log": "logs/045.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:14Z",
+      "ended_utc": "2026-09-06T08:43:14Z"
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--unidiff-zero",
+        "/home/runner/work/codex/codex/scripts/termux-feasibility/patches/0003-stage-observation.patch"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A3",
+      "log": "logs/046.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:14Z",
+      "ended_utc": "2026-09-06T08:43:14Z"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A3",
+      "log": "logs/047.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:14Z",
+      "ended_utc": "2026-09-06T08:43:15Z"
+    },
+    {
+      "argv": [
+        "git",
+        "diff"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A3",
+      "log": "logs/048.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:15Z",
+      "ended_utc": "2026-09-06T08:43:15Z"
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--unidiff-zero",
+        "--check",
+        "/home/runner/work/codex/codex/scripts/termux-feasibility/patches/0004-final-bindgen-resource-directory.patch"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A3",
+      "log": "logs/049.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:15Z",
+      "ended_utc": "2026-09-06T08:43:15Z"
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--unidiff-zero",
+        "/home/runner/work/codex/codex/scripts/termux-feasibility/patches/0004-final-bindgen-resource-directory.patch"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A3",
+      "log": "logs/050.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:15Z",
+      "ended_utc": "2026-09-06T08:43:15Z"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A3",
+      "log": "logs/051.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:15Z",
+      "ended_utc": "2026-09-06T08:43:15Z"
+    },
+    {
+      "argv": [
+        "git",
+        "diff"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A3",
+      "log": "logs/052.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:15Z",
+      "ended_utc": "2026-09-06T08:43:15Z"
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/gn/gn",
+        "--version"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/053.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:15Z",
+      "ended_utc": "2026-09-06T08:43:15Z"
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/ninja/ninja",
+        "--version"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/054.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:15Z",
+      "ended_utc": "2026-09-06T08:43:15Z"
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/clang/bin/clang",
+        "--version"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/055.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:15Z",
+      "ended_utc": "2026-09-06T08:43:15Z"
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/android-wrappers/cc",
+        "--version"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/056.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:15Z",
+      "ended_utc": "2026-09-06T08:43:15Z"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "--version"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/057.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:15Z",
+      "ended_utc": "2026-09-06T08:43:15Z"
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/android-wrappers/cc",
+        "-print-libgcc-file-name"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/058.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:15Z",
+      "ended_utc": "2026-09-06T08:43:15Z"
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/android-wrappers/cc",
+        "-print-search-dirs"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/059.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:16Z",
+      "ended_utc": "2026-09-06T08:43:16Z"
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/android-wrappers/cc",
+        "-v",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/android-link-smoke.c",
+        "-o",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/android-link-smoke"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/060.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:16Z",
+      "ended_utc": "2026-09-06T08:43:16Z"
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/clang/bin/llvm-readelf",
+        "-h",
+        "-l",
+        "-d",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/android-link-smoke"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/061.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:16Z",
+      "ended_utc": "2026-09-06T08:43:16Z"
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/third_party/rust-toolchain/bin/rustc",
+        "-Vv"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/062.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:16Z",
+      "ended_utc": "2026-09-06T08:43:16Z"
+    },
+    {
+      "argv": [
+        "dpkg-deb",
+        "-f",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/downloads/libclang-common-19-dev_19.1.1-1ubuntu1~24.04.2_amd64.deb",
+        "Package",
+        "Version",
+        "Architecture"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/063.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:17Z",
+      "ended_utc": "2026-09-06T08:43:17Z"
+    },
+    {
+      "argv": [
+        "dpkg-deb",
+        "-x",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/downloads/libclang-common-19-dev_19.1.1-1ubuntu1~24.04.2_amd64.deb",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/064.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:17Z",
+      "ended_utc": "2026-09-06T08:43:17Z"
+    },
+    {
+      "argv": [
+        "dpkg-deb",
+        "-f",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/downloads/libclang1-19_19.1.1-1ubuntu1~24.04.2_amd64.deb",
+        "Package",
+        "Version",
+        "Architecture"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/065.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:18Z",
+      "ended_utc": "2026-09-06T08:43:18Z"
+    },
+    {
+      "argv": [
+        "dpkg-deb",
+        "-x",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/downloads/libclang1-19_19.1.1-1ubuntu1~24.04.2_amd64.deb",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/066.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:18Z",
+      "ended_utc": "2026-09-06T08:43:18Z"
+    },
+    {
+      "argv": [
+        "dpkg-deb",
+        "-f",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/downloads/libllvm19_19.1.1-1ubuntu1~24.04.2_amd64.deb",
+        "Package",
+        "Version",
+        "Architecture"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/067.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:19Z",
+      "ended_utc": "2026-09-06T08:43:19Z"
+    },
+    {
+      "argv": [
+        "dpkg-deb",
+        "-x",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/downloads/libllvm19_19.1.1-1ubuntu1~24.04.2_amd64.deb",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/068.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:19Z",
+      "ended_utc": "2026-09-06T08:43:19Z"
+    },
+    {
+      "argv": [
+        "file",
+        "-L",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/x86_64-linux-gnu/libclang-19.so.19"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/069.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:19Z",
+      "ended_utc": "2026-09-06T08:43:19Z"
+    },
+    {
+      "argv": [
+        "readelf",
+        "-d",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/x86_64-linux-gnu/libclang-19.so.19"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/070.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:19Z",
+      "ended_utc": "2026-09-06T08:43:19Z"
+    },
+    {
+      "argv": [
+        "ldd",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/x86_64-linux-gnu/libclang-19.so.19"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/071.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:19Z",
+      "ended_utc": "2026-09-06T08:43:19Z"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-c",
+        "import ctypes,json,sys\nclass CXString(ctypes.Structure):\n    _fields_=[('data',ctypes.c_void_p),('flags',ctypes.c_uint)]\np=sys.argv[1]; c=ctypes.CDLL(p)\nc.clang_getClangVersion.restype=CXString\nc.clang_getCString.argtypes=[CXString];c.clang_getCString.restype=ctypes.c_char_p\nc.clang_disposeString.argtypes=[CXString]\ns=c.clang_getClangVersion(); v=c.clang_getCString(s).decode(); c.clang_disposeString(s)\nassert '19.1.1' in v,v\nprint(json.dumps({'loaded':p,'version':v,'status':'PASS'}))\n",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/x86_64-linux-gnu/libclang-19.so.19"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/072.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:20Z",
+      "ended_utc": "2026-09-06T08:43:20Z"
+    },
+    {
+      "argv": [
+        "rustup",
+        "run",
+        "1.91.0",
+        "cargo",
+        "run",
+        "--locked",
+        "--manifest-path",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/bindgen-smoke/Cargo.toml",
+        "--",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/bindgen-smoke/out.rs"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/073.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:20Z",
+      "ended_utc": "2026-09-06T08:43:30Z"
+    },
+    {
+      "argv": [
+        "rustup",
+        "run",
+        "1.91.0",
+        "cargo",
+        "run",
+        "--locked",
+        "--manifest-path",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/bindgen-smoke/Cargo.toml",
+        "--",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/bindgen-smoke/android-out.rs",
+        "android"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A3",
+      "log": "logs/074.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:30Z",
+      "ended_utc": "2026-09-06T08:43:30Z"
+    },
+    {
+      "argv": [
+        "rustup",
+        "run",
+        "1.91.0",
+        "cargo",
+        "build",
+        "--locked",
+        "--release",
+        "--target",
+        "aarch64-linux-android",
+        "--features",
+        "v8_enable_sandbox",
+        "-j",
+        "4",
+        "-vv"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A4",
+      "log": "logs/075.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T08:43:32Z",
+      "ended_utc": "2026-09-06T09:59:50Z"
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/gn/gn",
+        "args",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/producer-target/aarch64-linux-android/release/gn_out",
+        "--list",
+        "--json"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "stage": "A4",
+      "log": "logs/076.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T09:59:58Z",
+      "ended_utc": "2026-09-06T09:59:58Z"
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/clang/bin/llvm-readelf",
+        "-h",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/producer-target/aarch64-linux-android/release/gn_out/obj/librusty_v8.a"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A4",
+      "log": "logs/077.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T09:59:58Z",
+      "ended_utc": "2026-09-06T09:59:58Z"
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/clang/bin/llvm-ar",
+        "t",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/producer-target/aarch64-linux-android/release/gn_out/obj/librusty_v8.a"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A4",
+      "log": "logs/078.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T09:59:58Z",
+      "ended_utc": "2026-09-06T09:59:58Z"
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/clang/bin/llvm-nm",
+        "--undefined-only",
+        "/home/runner/work/_temp/v8-feasibility-34022532408-1/producer-target/aarch64-linux-android/release/gn_out/obj/librusty_v8.a"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1",
+      "stage": "A4",
+      "log": "logs/079.log",
+      "exit": 0,
+      "started_utc": "2026-09-06T09:59:58Z",
+      "ended_utc": "2026-09-06T09:59:59Z"
+    },
+    {
+      "argv": [
+        "rustup",
+        "run",
+        "1.95.0",
+        "cargo",
+        "build",
+        "--locked",
+        "--release",
+        "--target",
+        "aarch64-linux-android",
+        "-p",
+        "codex-code-mode-host",
+        "--bin",
+        "codex-code-mode-host",
+        "-j",
+        "4",
+        "-vv"
+      ],
+      "cwd": "/home/runner/work/_temp/v8-feasibility-34022532408-1/codex-src/codex-rs",
+      "stage": "A5",
+      "log": "logs/080.log",
+      "exit": 101,
+      "started_utc": "2026-09-06T10:00:33Z",
+      "ended_utc": "2026-09-06T10:00:46Z"
+    }
+  ],
+  "downloads": [
+    {
+      "source": "https://static.crates.io/crates/v8/v8-150.4.0.crate",
+      "file": "v8-150.4.0.crate",
+      "sha256": "42a978ff11f15b24e5c05a7123cf2b68f41e763546699781a924ef4e2cf43a49",
+      "bytes": 36296166
+    },
+    {
+      "source": "https://storage.googleapis.com/chrome-infra-packages/store/SHA256/db0ef95a0cceda773650c5ede8f0ea9cadcb0aa6c767ed75304e5622be212504",
+      "file": "gn.zip",
+      "sha256": "db0ef95a0cceda773650c5ede8f0ea9cadcb0aa6c767ed75304e5622be212504",
+      "bytes": 3463881,
+      "package": "gn/gn/linux-amd64",
+      "version": "git_revision:3357c4f51b1a9e676378c695dd9c7e9911c35ee6",
+      "instance_id": "2w75WgzO2nc2UMXt6PDqnK3LCqbHZ-11ME5WIr4hJQQC"
+    },
+    {
+      "source": "https://storage.googleapis.com/chrome-infra-packages/store/SHA256/3f1f1cc0f69a1bcfdf67fb6c2bc7419b1dd812bb8d0e79afa9bfa8a3553b5082",
+      "file": "ninja.zip",
+      "sha256": "3f1f1cc0f69a1bcfdf67fb6c2bc7419b1dd812bb8d0e79afa9bfa8a3553b5082",
+      "bytes": 182403,
+      "package": "infra/3pp/tools/ninja/linux-amd64",
+      "version": "version:3@1.12.1.chromium.4",
+      "instance_id": "Px8cwPaaG8_fZ_tsK8dBmx3YEruNDnmvqb-oo1U7UIIC"
+    },
+    {
+      "source": "https://dl.google.com/android/repository/android-ndk-r26c-linux.zip",
+      "file": "android-ndk-r26c-linux.zip",
+      "sha256": "6d6e659834d28bb24ba7ae66148ad05115ebbad7dabed1af9b3265674774fcf6",
+      "bytes": 668556021,
+      "version": "26.2.11394342",
+      "sha1": "7faebe2ebd3590518f326c82992603170f07c96e",
+      "checksum_source": "https://github.com/android/ndk/wiki/Home/90bb494b13366920b0e05807a6933af5a59926dc"
+    },
+    {
+      "source": "https://commondatastorage.googleapis.com/chromium-browser-clang/Linux_x64/clang-llvmorg-23-init-10931-g20b6ec66-11.tar.xz",
+      "file": "clang.tar.xz",
+      "sha256": "de584381536aa5ba2403033c4f8b70f3c39c2e5d7fa87c953b7fd8bfbba0ee2a",
+      "bytes": 69635068
+    },
+    {
+      "source": "https://storage.googleapis.com/chromium-browser-clang/Linux_x64/rust-toolchain-4c4205163abcbd08948b3efab796c543ba1ea687-4-llvmorg-23-init-10931-g20b6ec66.tar.xz",
+      "file": "chromium-rust.tar.xz",
+      "sha256": "832de79f8d90940f4aaef023f83a00c1e7210c023f4d57f606b7bf9831c889aa",
+      "bytes": 274393124
+    },
+    {
+      "source": "https://commondatastorage.googleapis.com/chrome-linux-sysroot/52d61d4446ffebfaa3dda2cd02da4ab4876ff237853f46d273e7f9b666652e1d",
+      "file": "host-sysroot.tar.xz",
+      "sha256": "52d61d4446ffebfaa3dda2cd02da4ab4876ff237853f46d273e7f9b666652e1d",
+      "bytes": 19727236
+    },
+    {
+      "source": "https://archive.ubuntu.com/ubuntu/pool/universe/l/llvm-toolchain-19/libclang-common-19-dev_19.1.1-1ubuntu1~24.04.2_amd64.deb",
+      "file": "libclang-common-19-dev_19.1.1-1ubuntu1~24.04.2_amd64.deb",
+      "sha256": "951e803e3540e2d1513f44fad07d179a85dc82b8cbb060f09ae3c602e47a8695",
+      "bytes": 742982
+    },
+    {
+      "source": "https://archive.ubuntu.com/ubuntu/pool/universe/l/llvm-toolchain-19/libclang1-19_19.1.1-1ubuntu1~24.04.2_amd64.deb",
+      "file": "libclang1-19_19.1.1-1ubuntu1~24.04.2_amd64.deb",
+      "sha256": "ca0340e157ab40939d40b88eb17bb14532854df631bd6fa7c6fe538401d2080e",
+      "bytes": 8272094
+    },
+    {
+      "source": "https://archive.ubuntu.com/ubuntu/pool/main/l/llvm-toolchain-19/libllvm19_19.1.1-1ubuntu1~24.04.2_amd64.deb",
+      "file": "libllvm19_19.1.1-1ubuntu1~24.04.2_amd64.deb",
+      "sha256": "a62f1074eb7aecf10e00fed9c7c967dc6c801fae444a40b8007e246320f5ee15",
+      "bytes": 28737618
+    }
+  ],
+  "patches": [
+    {
+      "file": "0001-final-android-bindgen-and-prepared-ndk.patch",
+      "sha256": "9ae26b62faa2be3b20459fa82c75847e0cf0fdfd7a13e278a01ede30cf2ef76b",
+      "repo": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "before": {
+        "build.rs": "cd979d31a70f3d5a2d240019a52de2412a803690f8d3b441bf8254c548588c31"
+      },
+      "after": {
+        "build.rs": "79111c27a401b46a70d4bf29bfd89e50d2e09ffb67fce905c47ec9d393abbaa0"
+      }
+    },
+    {
+      "file": "0002-android-ndk-version-input.patch",
+      "sha256": "87aa8a8939caedfc5f2ea437d39d23c5d078cb51506c0be29ae5c87653569242",
+      "repo": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/build",
+      "before": {
+        "config/gclient_args.gni": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "after": {
+        "config/gclient_args.gni": "ae1c9880dbf43936d54bcb0732127ffea8b9923dba6cb1615f39ec9ee0fa80f9"
+      }
+    },
+    {
+      "file": "0003-stage-observation.patch",
+      "sha256": "1e1b5cbf5edc3cc97123806ebf376ed250514566c906d36f45b5baebb249096a",
+      "repo": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "before": {
+        "build.rs": "79111c27a401b46a70d4bf29bfd89e50d2e09ffb67fce905c47ec9d393abbaa0"
+      },
+      "after": {
+        "build.rs": "889bbdbaa4a697aeb898e4a935f4fa4bd846263a2847788097bdf7a7193af57e"
+      }
+    },
+    {
+      "file": "0004-final-bindgen-resource-directory.patch",
+      "sha256": "dd08dff6c37d66b761671ec11df5229dad5af56750ae4029995488c4d160f8b8",
+      "repo": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src",
+      "before": {
+        "build.rs": "889bbdbaa4a697aeb898e4a935f4fa4bd846263a2847788097bdf7a7193af57e"
+      },
+      "after": {
+        "build.rs": "b2fcf19bad96769bc9a4d7e6588744feb4514209f6b6e7b27503805e2fbd444f"
+      }
+    }
+  ],
+  "outputs": {
+    "librusty_v8.a": "f830eb3e9abcc492754f6ae9f198f31a706f37d046afc213e766d40a0290b3e2",
+    "librusty_v8_ptrcomp_sandbox_release_aarch64-linux-android.a.gz": "cc97879bc1e811cec3f6274e02a5da01796b32c489270893c94c13675c77daea",
+    "src_binding_ptrcomp_sandbox_release_aarch64-linux-android.rs": "35f9f49c552786714c814f66925bc9ebfb255194f2b66790f01bfad70a1f7e78"
+  },
+  "workflow": {
+    "GITHUB_SHA": "f8738419e5037768b70e9f257b94d843a8e8dea2",
+    "GITHUB_REF": "refs/heads/termux/v8-producer-feasibility-v150.4.0",
+    "GITHUB_WORKFLOW_REF": "cloudishBenne/codex/.github/workflows/build-termux.yml@refs/heads/termux/v8-producer-feasibility-v150.4.0",
+    "GITHUB_WORKFLOW_SHA": "f8738419e5037768b70e9f257b94d843a8e8dea2",
+    "GITHUB_RUN_ID": "34022532408",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "ImageOS": "ubuntu24",
+    "ImageVersion": "20260831.293.1"
+  },
+  "host": {
+    "uname": [
+      "Linux",
+      "runnervmejwal",
+      "6.17.0-1022-azure",
+      "#22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026",
+      "x86_64",
+      "x86_64"
+    ],
+    "cpu_count": 4,
+    "disk": {
+      "total": 154894188544,
+      "used": 62512132096,
+      "free": 92365279232
+    },
+    "meminfo": "MemTotal:       16372436 kB\nMemFree:        13024988 kB\nMemAvailable:   15359240 kB\nBuffers:           89932 kB\nCached:          2495776 kB\nSwapCached:            0 kB\nActive:           731456 kB\nInactive:        2134476 kB\nActive(anon):     332248 kB\nInactive(anon):        0 kB\nActive(file):     399208 kB\nInactive(file):  2134476 kB\nUnevictable:       46720 kB\nMlocked:           43648 kB\nSwapTotal:       3145724 kB\nSwapFree:        3145724 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:             91700 kB\nWriteback:             0 kB\nAnonPages:        322748 kB\nMapped:           315732 kB\nShmem:             43300 kB\nKReclaimable:     123864 kB\nSlab:             202312 kB\nSReclaimable:     123864 kB\nSUnreclaim:        78448 kB\nKernelStack:        3948 kB\nPageTables:         6184 kB\nSecPageTables:         0 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    11331940 kB\nCommitted_AS:    1951344 kB\nVmallocTotal:   13743895347199 kB\nVmallocUsed:       37684 kB\nVmallocChunk:          0 kB\nPercpu:             2192 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:    104448 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:         0 kB\nFilePmdMapped:         0 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      117888 kB\nDirectMap2M:     4071424 kB\nDirectMap1G:    14680064 kB\n"
+  },
+  "jobserver_warnings": 146,
+  "sources": {
+    "codex": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+    "rusty_v8": "5c15a6995c9bb4bacd3e341b59fff32c909c80bf",
+    "critical_gitlinks": {
+      "v8": "ac1e23989121713ca642f6650b34deff7b686896",
+      "build": "8acb33ac8dceef0503443109c0a92988189563ef",
+      "buildtools": "17495e454aae81b581e8b3caccbb53054509b280",
+      "tools/clang": "45f4b9e25124809497a27a8ae0e63d603b0f9f1b",
+      "third_party/libc++/src": "5abc7f839700f0f17338434e1c1c6a8c87c00c11",
+      "third_party/libc++abi/src": "8f11bb1d4438d0239d0dfc1bd9456a9f31629dda",
+      "third_party/rust": "26e8ff47f18a8d28d6187a04b6a16cb7332356f8"
+    },
+    "codex_lock": "3494b8a78d0f643556a83a9cc184e912bcab9f4c5640288952f4223452ba5dc8",
+    "producer_lock": "4cdeb9b5c6b2a964f6429b32e73218eb91bba1b0a34e8a28ddc456299dc2070b"
+  },
+  "ndk_selection": {
+    "previous": "2@30.0.14608247",
+    "selected": "26.2.11394342",
+    "reason": "Missing complete consumer compiler/runtime in DEPS NDK; A3 r26c integration",
+    "scope": "single NDK sysroot for V8, bindgen and consumer; NDK consumer tools; unchanged Chromium V8 compiler"
+  },
+  "android_toolchain": {
+    "mode": "Chromium V8 compiler + complete NDK r26c consumer/sysroot",
+    "api": 29,
+    "ndk_revision": "26.2.11394342",
+    "v8_clang_revision": "llvmorg-23-init-10931-g20b6ec66-11",
+    "wrappers": {
+      "cc": "3cc2cf589dc584b6e7dcf475db8cc6c9ab84d5207049649390e349963639f63e",
+      "cxx": "0a7b5263d4b94e51390567563b0ba052ead0b2c93f81c7846c4eddcf69e8c4e2"
+    },
+    "builtins": {
+      "path": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/third_party/android_toolchain/ndk/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/17/lib/linux/libclang_rt.builtins-aarch64-android.a",
+      "sha256": "9885ac8a8fb79db8d2d318bbc52e5a2037f529afa2be7e1415454cdb9ff27078"
+    },
+    "unwind_candidates": {
+      "lib/clang/17/lib/linux/aarch64/libunwind.a": "7ce93918aec0ea042e1e088276bdad1c47f49105481705c93c9a89caffac4859",
+      "lib/clang/17/lib/linux/arm/libunwind.a": "c8355340b10196c1f721ff4a239db248efbedc29906effe0ffa46b0d221091a8",
+      "lib/clang/17/lib/linux/i386/libunwind.a": "2fb229aa7df7fd22c8e12cfa7e084e19256fe8f36c69e2dd8f4045c3376ad8db",
+      "lib/clang/17/lib/linux/riscv64/libunwind.a": "a5f97e9eb2ef77b12b158b89942da589ebaaf32133a9d65b161d288623cb19a2",
+      "lib/clang/17/lib/linux/x86_64/libunwind.a": "be1099b4e3a82374080e3e614c766b19e9125a4f3c4c97678354792a20c48e65"
+    },
+    "consumer_tool_hashes": {
+      "bin/clang": "f3efa06beda3d4c46863f1bb37e6e563a5c39760f9ea5a311be7eeed05a6d095",
+      "bin/clang++": "f3efa06beda3d4c46863f1bb37e6e563a5c39760f9ea5a311be7eeed05a6d095",
+      "bin/ld.lld": "1c46a84a1c7144c12942997daf51d9ef5843cbd11898fd546f1e9d60600813fc",
+      "bin/llvm-ar": "ff27ac669a4c21a341871231f2aed321c613a6a8526b458719c6877cebcbeb2b"
+    }
+  },
+  "build_environment": {
+    "GN": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/gn/gn",
+    "NINJA": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/ninja/ninja",
+    "PYTHON": "/usr/bin/python3",
+    "CLANG_BASE_PATH": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/clang",
+    "RR_ANDROID_SYSROOT": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/third_party/android_toolchain/ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot",
+    "RR_ANDROID_API": "29",
+    "GN_ARGS": "android_ndk_api_level=29",
+    "CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/android-wrappers/cc",
+    "CC_aarch64_linux_android": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/android-wrappers/cc",
+    "CXX_aarch64_linux_android": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/android-wrappers/cxx",
+    "AR_aarch64_linux_android": "/home/runner/work/_temp/v8-feasibility-34022532408-1/rusty-v8-src/third_party/android_toolchain/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar",
+    "CARGO_TARGET_DIR": "/home/runner/work/_temp/v8-feasibility-34022532408-1/producer-target",
+    "LIBCLANG_PATH": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/x86_64-linux-gnu/libclang-19.so.19",
+    "LD_LIBRARY_PATH": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/x86_64-linux-gnu",
+    "RR_LIBCLANG_RESOURCE": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/llvm-19/lib/clang/19"
+  },
+  "tool_hashes": {
+    "tools/gn/gn": "b57b07b452e2e68ee07fde47c22134d82dfe919b7e3eb77ea3c78f7eb0759812",
+    "tools/ninja/ninja": "09f0e5a8a2cf762b24b4d3ed464ffb2529e650d2efc36bab31da36aa93791efc",
+    "tools/clang/bin/clang": "0001eafa8314c3448b8be72836bb40f6512c4828de275983737d11a081ae6077",
+    "tools/android-wrappers/cc": "3cc2cf589dc584b6e7dcf475db8cc6c9ab84d5207049649390e349963639f63e"
+  },
+  "libclang_preflight": {
+    "source": "Ubuntu noble-updates llvm-toolchain-19",
+    "package_version": "1:19.1.1-1ubuntu1~24.04.2",
+    "packages": [
+      [
+        "libclang-common-19-dev",
+        "universe",
+        "951e803e3540e2d1513f44fad07d179a85dc82b8cbb060f09ae3c602e47a8695"
+      ],
+      [
+        "libclang1-19",
+        "universe",
+        "ca0340e157ab40939d40b88eb17bb14532854df631bd6fa7c6fe538401d2080e"
+      ],
+      [
+        "libllvm19",
+        "main",
+        "a62f1074eb7aecf10e00fed9c7c967dc6c801fae444a40b8007e246320f5ee15"
+      ]
+    ],
+    "path": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/x86_64-linux-gnu/libclang-19.so.19",
+    "size": 37452088,
+    "sha256": "c88d72e7a720188e4da36feee7605ddd539170d4cce9871f51e0fb48cfc10760",
+    "environment": {
+      "LIBCLANG_PATH": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/x86_64-linux-gnu/libclang-19.so.19",
+      "LD_LIBRARY_PATH": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/x86_64-linux-gnu",
+      "RR_LIBCLANG_RESOURCE": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/llvm-19/lib/clang/19"
+    },
+    "resource_directory": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/llvm-19/lib/clang/19",
+    "file": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/x86_64-linux-gnu/libclang-19.so.19: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=14dbb36eb6a3a1eca877a009781d52ac6ac64e41, stripped\n",
+    "dynamic": "\nDynamic section at offset 0x23aec10 contains 34 entries:\n  Tag        Type                         Name/Value\n 0x0000000000000003 (PLTGOT)             0x23affe8\n 0x0000000000000002 (PLTRELSZ)           24528 (bytes)\n 0x0000000000000017 (JMPREL)             0x436158\n 0x0000000000000014 (PLTREL)             RELA\n 0x0000000000000007 (RELA)               0x1aaf0\n 0x0000000000000008 (RELASZ)             4306536 (bytes)\n 0x0000000000000009 (RELAENT)            24 (bytes)\n 0x000000006ffffff9 (RELACOUNT)          177342\n 0x0000000000000006 (SYMTAB)             0x2b8\n 0x000000000000000b (SYMENT)             24 (bytes)\n 0x0000000000000005 (STRTAB)             0x90f0\n 0x000000000000000a (STRSZ)              65345 (bytes)\n 0x000000006ffffef5 (GNU_HASH)           0x19038\n 0x0000000000000001 (NEEDED)             Shared library: [libLLVM.so.19.1]\n 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]\n 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]\n 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]\n 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]\n 0x0000000000000001 (NEEDED)             Shared library: [ld-linux-x86-64.so.2]\n 0x000000000000000e (SONAME)             Library soname: [libclang-19.so.19]\n 0x000000000000000c (INIT)               0x43c128\n 0x000000000000000d (FINI)               0x1bb0500\n 0x000000000000001a (FINI_ARRAY)         0x2161180\n 0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)\n 0x0000000000000019 (INIT_ARRAY)         0x2161188\n 0x000000000000001b (INIT_ARRAYSZ)       64 (bytes)\n 0x000000000000001d (RUNPATH)            Library runpath: [$ORIGIN/../lib]\n 0x000000006ffffffb (FLAGS_1)            Flags: NODELETE\n 0x000000006ffffff0 (VERSYM)             0x19ce4\n 0x000000006ffffffc (VERDEF)             0x1a8c0\n 0x000000006ffffffd (VERDEFNUM)          5\n 0x000000006ffffffe (VERNEED)            0x1a94c\n 0x000000006fffffff (VERNEEDNUM)         4\n 0x0000000000000000 (NULL)               0x0\n",
+    "ldd": "\tlinux-vdso.so.1 (0x00007f663332b000)\n\tlibLLVM.so.19.1 => /home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/x86_64-linux-gnu/libLLVM.so.19.1 (0x00007f6629200000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f6628e00000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f6633230000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f6633202000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f6628a00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f663332d000)\n\tlibffi.so.8 => /lib/x86_64-linux-gnu/libffi.so.8 (0x00007f66331f4000)\n\tlibedit.so.2 => /lib/x86_64-linux-gnu/libedit.so.2 (0x00007f66331ba000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f6630de4000)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x00007f6629146000)\n\tlibxml2.so.2 => /lib/x86_64-linux-gnu/libxml2.so.2 (0x00007f6628c1e000)\n\tlibtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0x00007f6630dae000)\n\tlibbsd.so.0 => /lib/x86_64-linux-gnu/libbsd.so.0 (0x00007f6630d98000)\n\tlibicuuc.so.74 => /lib/x86_64-linux-gnu/libicuuc.so.74 (0x00007f6628600000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007f6629114000)\n\tlibmd.so.0 => /lib/x86_64-linux-gnu/libmd.so.0 (0x00007f6629105000)\n\tlibicudata.so.74 => /lib/x86_64-linux-gnu/libicudata.so.74 (0x00007f6626800000)\n",
+    "dependencies": {
+      "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/x86_64-linux-gnu/libLLVM.so.19.1": "7e016cffd3eb077fa338b8ec08a7ab500e43c7460223d4b1f5c6b1bf10274b24",
+      "/lib/x86_64-linux-gnu/libstdc++.so.6": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11",
+      "/lib/x86_64-linux-gnu/libm.so.6": "e9c4b28d340e415b8137480ec442662f981e1399386c5931dae0e886e3639e91",
+      "/lib/x86_64-linux-gnu/libgcc_s.so.1": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb",
+      "/lib/x86_64-linux-gnu/libc.so.6": "8db37cf3f2169f59a0f07ef1fea308c35656668c64c8ff294e1860f4121eb161",
+      "/lib/x86_64-linux-gnu/libffi.so.8": "00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153",
+      "/lib/x86_64-linux-gnu/libedit.so.2": "195c607216f8581dbf516346ed38f4c73500cac4b84e18eb0a4fd49931e4cd56",
+      "/lib/x86_64-linux-gnu/libz.so.1": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892",
+      "/lib/x86_64-linux-gnu/libzstd.so.1": "0a2128bc10841fb29e76d08d945864dfb0b6a66da5df6df5d8299197439e54bb",
+      "/lib/x86_64-linux-gnu/libxml2.so.2": "8b6f68c242929aebe49eb28f800dc3e8ee7147298c94bdabc834f61eff1ac177",
+      "/lib/x86_64-linux-gnu/libtinfo.so.6": "28ab8e2e29d46dc8f7222025ca2d61e0b898364c6426cc631bf4ecc7c7f5ac52",
+      "/lib/x86_64-linux-gnu/libbsd.so.0": "e86cd4f0019f42c2ba5e60602e0edc8694d2948377d98c3654d0f6bddb5254bb",
+      "/lib/x86_64-linux-gnu/libicuuc.so.74": "7560aadde38e5f4237a47a1ddd5891f9b36768a77a60faae30beee003ac01901",
+      "/lib/x86_64-linux-gnu/liblzma.so.5": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb",
+      "/lib/x86_64-linux-gnu/libmd.so.0": "423e18586b6ea740f4465afd64f7a9a4cb7264ed979c8e7256f9085af5345fef",
+      "/lib/x86_64-linux-gnu/libicudata.so.74": "ddbb3718b8bd9cbd780e5ab08b4503c30a6c4fa0706ebe5d074ed6b596c1714e"
+    },
+    "direct_load": {
+      "loaded": "/home/runner/work/_temp/v8-feasibility-34022532408-1/tools/host-libclang/usr/lib/x86_64-linux-gnu/libclang-19.so.19",
+      "version": "Ubuntu clang version 19.1.1 (1ubuntu1~24.04.2)",
+      "status": "PASS"
+    },
+    "result": "PASS",
+    "smoke": {
+      "bindgen": "0.72.0",
+      "lock_sha256": "afeb34f147cda4295ea758109ef29a6fa1430ac8ab1dfece1c944491458a4df1",
+      "bindings_sha256": "afd22e67bcbcc37b70b2a895f1c142965fbec81e7a0d1f5e0a84a811137128a3",
+      "android_bindings_sha256": "240ec4f5137997d04ac62c45e2f30ec873bc370bc8e531ac9489da77050c7dee",
+      "host": "PASS",
+      "android_api29": "PASS",
+      "result": "PASS"
+    }
+  },
+  "loader_scope": "Explicit file and companion directory, scoped to Cargo process trees; direct and exact bindgen smoke use same environment. No global shell exports.",
+  "prepared_source_sha256": "020b5024e8d5d938be182efb3721d55910c5213ec5a1febd85c7f0d2c650f159",
+  "consumer_source_sha256": "9f4d49e53b24cd72d01c9456a3d25dd2f9758c17611093ef722372649561279b",
+  "jobs": 4,
+  "features": {
+    "target_os": "\"android\"",
+    "target_cpu": "\"arm64\"",
+    "v8_target_cpu": "\"arm64\"",
+    "v8_enable_sandbox": "true",
+    "v8_enable_pointer_compression": "true",
+    "v8_enable_external_code_space": "true",
+    "use_custom_libcxx": "true",
+    "is_component_build": "false",
+    "is_debug": "false"
+  },
+  "archive_member_review_required": true,
+  "source_postbuild": {
+    "producer": "020b5024e8d5d938be182efb3721d55910c5213ec5a1febd85c7f0d2c650f159",
+    "consumer": "9f4d49e53b24cd72d01c9456a3d25dd2f9758c17611093ef722372649561279b",
+    "producer_lock": "4cdeb9b5c6b2a964f6429b32e73218eb91bba1b0a34e8a28ddc456299dc2070b",
+    "consumer_lock": "3494b8a78d0f643556a83a9cc184e912bcab9f4c5640288952f4223452ba5dc8"
+  },
+  "consumer_pair": {
+    "archive": "/home/runner/work/_temp/v8-feasibility-34022532408-1/artifacts/librusty_v8_ptrcomp_sandbox_release_aarch64-linux-android.a.gz",
+    "archive_sha256": "cc97879bc1e811cec3f6274e02a5da01796b32c489270893c94c13675c77daea",
+    "binding": "/home/runner/work/_temp/v8-feasibility-34022532408-1/artifacts/src_binding_ptrcomp_sandbox_release_aarch64-linux-android.rs",
+    "binding_sha256": "35f9f49c552786714c814f66925bc9ebfb255194f2b66790f01bfad70a1f7e78"
+  },
+  "failure": {
+    "message": "command 080 failed: 101",
+    "stage": "A5"
+  },
+  "elapsed_seconds": 4779.1,
+  "ended_utc": "2026-09-06T10:00:46Z"
+}
