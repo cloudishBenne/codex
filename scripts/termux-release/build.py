@@ -45,7 +45,7 @@ def stage(name):
     print("STAGE", name, flush=True)
 
 
-def run(argv, cwd=SOURCE):
+def run(argv, cwd=SOURCE, *, stdout_only=False):
     argv = list(map(str, argv))
     log = ROOT / "logs" / f"{len(REPORT['commands']):03d}.log"
     row = {"argv": argv, "cwd": str(cwd), "log": log.name, "exit": None}
@@ -60,17 +60,22 @@ def run(argv, cwd=SOURCE):
         env=ENV,
         stdin=subprocess.DEVNULL,
         stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
+        stderr=subprocess.PIPE,
     )
     sel = selectors.DefaultSelector()
-    sel.register(proc.stdout, selectors.EVENT_READ)
-    with log.open("xb") as f:
+    stdout_log = log.with_suffix(".stdout")
+    stderr_log = log.with_suffix(".stderr")
+    with log.open("xb") as f, stdout_log.open("xb") as out, stderr_log.open("xb") as err:
+        sel.register(proc.stdout, selectors.EVENT_READ, out)
+        sel.register(proc.stderr, selectors.EVENT_READ, err)
         while sel.get_map():
             for key, _ in sel.select(timeout=1):
                 data = os.read(key.fileobj.fileno(), 65536)
                 if not data:
                     sel.unregister(key.fileobj)
                     continue
+                key.data.write(data)
+                key.data.flush()
                 f.write(data)
                 f.flush()
                 sys.stdout.buffer.write(data)
@@ -99,13 +104,18 @@ def run(argv, cwd=SOURCE):
                 print("HEARTBEAT", json.dumps(heart), flush=True)
                 beat = time.monotonic()
     proc.stdout.close()
+    proc.stderr.close()
     sel.close()
     row.update(
         exit=proc.wait(), elapsed_s=round(time.monotonic() - start, 2), sha256=sha(log)
     )
+    row["streams"] = {
+        "stdout": {"log": stdout_log.name, "sha256": sha(stdout_log)},
+        "stderr": {"log": stderr_log.name, "sha256": sha(stderr_log)},
+    }
     save()
     require(row["exit"] == 0, f"Command failed: {log.name}")
-    return log.read_text(errors="replace")
+    return (stdout_log if stdout_only else log).read_text(errors="replace")
 
 
 def download(pin):
@@ -416,6 +426,7 @@ def main():
                     PINS["target"],
                 ],
                 SOURCE / "codex-rs",
+                stdout_only=True,
             )
         )
         v8 = [p for p in metadata["packages"] if p["name"] == "v8"]
