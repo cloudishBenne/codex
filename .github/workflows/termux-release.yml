@@ -1,0 +1,110 @@
+name: Termux exact-source release candidate
+run-name: "Termux candidate ${{ inputs.correlation }}"
+on:
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: Full committed port SHA; must equal the dispatched workflow SHA
+        type: string
+        required: true
+      correlation:
+        description: Unique S25 dispatch correlation
+        type: string
+        required: true
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: termux-release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  repository-lock-gate:
+    if: github.ref == 'refs/heads/feat/termux-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      SOURCE_SHA: ${{ inputs.source_sha }}
+    steps:
+      - name: Verify dispatch source identity
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$SOURCE_SHA" = "$GITHUB_SHA"
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          ref: ${{ inputs.source_sha }}
+          persist-credentials: false
+      - name: Prepare pinned repository gate tools
+        run: |
+          set -euo pipefail
+          rr_tools="$RUNNER_TEMP/repo-gate-tools"
+          mkdir "$rr_tools"
+          curl --fail --location --retry 2 https://github.com/casey/just/releases/download/1.58.0/just-1.58.0-x86_64-unknown-linux-musl.tar.gz -o "$rr_tools/just.tar.gz"
+          printf '%s  %s\n' 4a5cc2f53e6f0f8c59092a6cc38291eb729d46a7dd95d3ae582008881b84931d "$rr_tools/just.tar.gz" | sha256sum -c -
+          tar -xzf "$rr_tools/just.tar.gz" -C "$rr_tools" just
+          curl --fail --location --retry 2 https://releases.bazel.build/9.0.0/release/bazel-9.0.0-linux-x86_64 -o "$rr_tools/bazel"
+          printf '%s  %s\n' c44a93f25398c68f904fa1d19b61d321de6c0d2f09dca375d7bc0dc9b9428403 "$rr_tools/bazel" | sha256sum -c -
+          chmod 755 "$rr_tools/just" "$rr_tools/bazel"
+          echo "$rr_tools" >> "$GITHUB_PATH"
+      - name: Check normalized Cargo lock against repository Bazel lock
+        run: |
+          set -euo pipefail
+          just bazel-lock-update 2>&1 | tee "$RUNNER_TEMP/repo-gate.log"
+          git diff --exit-code
+      - name: Preserve gate evidence
+        if: always()
+        run: |
+          git diff --binary > "$RUNNER_TEMP/repo-gate.diff"
+          git status --porcelain=v1 > "$RUNNER_TEMP/repo-gate.status"
+          sha256sum codex-rs/Cargo.lock MODULE.bazel.lock > "$RUNNER_TEMP/repo-gate.sha256"
+          cp MODULE.bazel.lock "$RUNNER_TEMP/repo-gate.MODULE.bazel.lock"
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        if: always()
+        with:
+          name: termux-release-repo-gate-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/repo-gate.*
+          retention-days: 30
+          if-no-files-found: warn
+  cross-build:
+    needs: repository-lock-gate
+    if: github.ref == 'refs/heads/feat/termux-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      SOURCE_SHA: ${{ inputs.source_sha }}
+      RR_ROOT: ${{ runner.temp }}/termux-release-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - name: Verify dispatch source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$SOURCE_SHA" = "$GITHUB_SHA"
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          ref: ${{ inputs.source_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Preflight and build both committed-source executables
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/termux-release/build.py
+      - name: Independent output and evidence salvage
+        if: always()
+        run: python3 scripts/termux-release/salvage.py "$RR_ROOT" "$RUNNER_TEMP/termux-release-salvage"
+      - name: Upload independent salvage
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: termux-release-salvage-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/termux-release-salvage/
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Upload candidate build outputs
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: termux-release-outputs-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.RR_ROOT }}/artifacts/
+          retention-days: 30
+          if-no-files-found: warn

@@ -1,0 +1,82 @@
+{
+  "baseline": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+  "lock_sha256": "a2cb91dfb2e8112bc81d05158fa00b9698e2df8cc1ae0547b5dc5606a44904d3",
+  "producer_commit": "f8738419e5037768b70e9f257b94d843a8e8dea2",
+  "producer_run": 34022532408,
+  "pair_artifact_id": 9987129029,
+  "pair_artifact": "v8-feasibility-pair-34022532408-1",
+  "pair_artifact_digest": "sha256:c6b8b55c6fd061d4eb9c2e9f42cdfdafbab4f2cfca211c55c0bc7eda0728e7d6",
+  "pair": {
+    "librusty_v8_ptrcomp_sandbox_release_aarch64-linux-android.a.gz": "cc97879bc1e811cec3f6274e02a5da01796b32c489270893c94c13675c77daea",
+    "src_binding_ptrcomp_sandbox_release_aarch64-linux-android.rs": "35f9f49c552786714c814f66925bc9ebfb255194f2b66790f01bfad70a1f7e78"
+  },
+  "raw_archive_sha256": "f830eb3e9abcc492754f6ae9f198f31a706f37d046afc213e766d40a0290b3e2",
+  "raw_archive_bytes": 180411826,
+  "members": 1946,
+  "rust": "1.95.0",
+  "rust_commit": "59807616e1fa2540724bfbac14d7976d7e4a3860",
+  "target": "aarch64-linux-android",
+  "api": 29,
+  "jobs": 4,
+  "ndk": {
+    "url": "https://dl.google.com/android/repository/android-ndk-r26c-linux.zip",
+    "sha256": "6d6e659834d28bb24ba7ae66148ad05115ebbad7dabed1af9b3265674774fcf6"
+  },
+  "builtins_sha256": "9885ac8a8fb79db8d2d318bbc52e5a2037f529afa2be7e1415454cdb9ff27078",
+  "libclang_sha256": "c88d72e7a720188e4da36feee7605ddd539170d4cce9871f51e0fb48cfc10760",
+  "host_debs": [
+    {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/l/llvm-toolchain-19/libclang-common-19-dev_19.1.1-1ubuntu1~24.04.2_amd64.deb",
+      "sha256": "951e803e3540e2d1513f44fad07d179a85dc82b8cbb060f09ae3c602e47a8695"
+    },
+    {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/l/llvm-toolchain-19/libclang1-19_19.1.1-1ubuntu1~24.04.2_amd64.deb",
+      "sha256": "ca0340e157ab40939d40b88eb17bb14532854df631bd6fa7c6fe538401d2080e"
+    },
+    {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/l/llvm-toolchain-19/libllvm19_19.1.1-1ubuntu1~24.04.2_amd64.deb",
+      "sha256": "a62f1074eb7aecf10e00fed9c7c967dc6c801fae444a40b8007e246320f5ee15"
+    },
+    {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/p/pkgconf/libpkgconf3_1.8.1-2build1_amd64.deb",
+      "sha256": "fc3a57e8f931ec06cb7c51acc56878f1fec247ff02a7adcab26905c2faeb2792",
+      "metadata": "Package: libpkgconf3\nVersion: 1.8.1-2build1\nArchitecture: amd64\n"
+    },
+    {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/p/pkgconf/pkgconf-bin_1.8.1-2build1_amd64.deb",
+      "sha256": "7a812f05ee1610154b433e2ad54f6e4163fcbb306b9fb31afe959afb2e5e1545",
+      "metadata": "Package: pkgconf-bin\nVersion: 1.8.1-2build1\nArchitecture: amd64\n"
+    }
+  ],
+  "target_packages": [
+    {
+      "name": "openssl",
+      "version": "1:3.6.3",
+      "architecture": "aarch64",
+      "url": "https://packages.termux.dev/apt/termux-main/pool/main/o/openssl/openssl_1:3.6.3_aarch64.deb",
+      "sha256": "86760e9ce736f463236f2c15b1eb3a3fdcfc5778d0fd7077a917448dcc90f3aa",
+      "bytes": 2478376
+    },
+    {
+      "name": "ca-certificates",
+      "version": "1:2026.08.13",
+      "architecture": "all",
+      "url": "https://packages.termux.dev/apt/termux-main/pool/main/c/ca-certificates/ca-certificates_1:2026.08.13_all.deb",
+      "sha256": "8e894fb885da738b4ca9a7932703e414d730fa32e78aba33046a747822547d5a",
+      "bytes": 105404
+    },
+    {
+      "name": "zlib",
+      "version": "1.3.2",
+      "architecture": "aarch64",
+      "url": "https://packages.termux.dev/apt/termux-main/pool/main/z/zlib/zlib_1.3.2_aarch64.deb",
+      "sha256": "75e7d0af17fcc3b40004309fdc00a1ddb9ae08346dce5e269902c34ac3966ac9",
+      "bytes": 62840
+    }
+  ],
+  "cmake": {
+    "url": "https://files.pythonhosted.org/packages/59/e8/096984b89133681533650b9078c5ed1c5c9b534e869b5487f22d4de1935c/cmake-3.31.6-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "sha256": "1c8b05df0602365da91ee6a3336fe57525b137706c4ab5675498f662ae1dbcec"
+  },
+  "producer_manifest_sha256": "3b7ee0f76185e63170d822326ed20c252a5ba29deb284d828069f0281e6e634e"
+}
